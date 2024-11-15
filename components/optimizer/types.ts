@@ -1,4 +1,13 @@
-import { Address } from 'viem';
+import { Address, Chain } from 'viem';
+import {
+  arbitrum,
+  avalanche,
+  base,
+  bsc,
+  mainnet,
+  optimism,
+  polygon,
+} from 'viem/chains';
 import { NATIVE_TOKEN_ADDRESS } from '@/optimizer/consts';
 import { PermitTx, Tx } from '../../optimizer/types';
 
@@ -72,7 +81,17 @@ export const normalizeAddress = (address: string): Address => {
   if (!address) {
     throw new Error('Invalid address: address is empty');
   }
-  if (address === 'eth') {
+  if (
+    address === 'eth' ||
+    address === 'op' ||
+    address === 'arb' ||
+    address === 'base' ||
+    address === 'zora' ||
+    address === 'scrl' ||
+    address === 'matic' ||
+    address === 'avax' ||
+    address === 'bsc'
+  ) {
     return NATIVE_TOKEN_ADDRESS;
   }
   if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
@@ -99,4 +118,25 @@ export const formatAmount = (value: number): string => {
       : value >= 1
         ? value.toFixed(2)
         : value.toFixed(6);
+};
+
+export const OptimizerSupportedChains = [
+  mainnet,
+  polygon,
+  arbitrum,
+  optimism,
+  avalanche,
+  bsc,
+  base,
+].reduce(
+  (acc, chain) => {
+    acc[chain.id] = chain;
+    return acc;
+  },
+  {} as { [key: number]: Chain }
+);
+
+export const chainId2name = (id: number): string => {
+  const chain = OptimizerSupportedChains[id];
+  return chain?.name || 'Unknown Chain';
 };

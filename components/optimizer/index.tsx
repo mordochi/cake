@@ -1,18 +1,16 @@
 'use client';
 import * as amplitude from '@amplitude/analytics-browser';
-import { Button, Center, Flex, Text, useToast } from '@chakra-ui/react';
+import { Button, Flex, Text, useToast } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
 import { switchChain } from 'wagmi/actions';
 import { StakeChainType } from '@/cases/types';
-import CryptoIcon from '@/components/CryptoIcon';
 import FeedbackModal, {
   DEFAULT_FEEDBACK_MODAL_STATE,
   FeedbackType,
   IFeedbackModalProps,
 } from '@/components/optimizer/FeedbackModal';
-import { baseApiUrl } from '@/constants';
 import useConnector from '@/hooks/useConnector';
 import ProtocolManager from '@/optimizer/protocolManager';
 import {
@@ -22,6 +20,7 @@ import {
   VaultMetadata,
 } from '@/optimizer/types';
 import { Reward } from '@/optimizer/types';
+import { ChainButtonList } from './ChainButtonList';
 import ConfirmModal, {
   DEFAULT_CONFIRM_MODAL_STATE,
   IConfirmModalProps,
@@ -33,73 +32,16 @@ import { ToData, ToTable, getVaultDisplay } from './ToTable';
 import {
   DebankPortfolio,
   DebankTokenData,
+  OptimizerSupportedChains,
   formatAmount,
   normalizeAddress,
 } from './types';
-
-const DefaultChain = 'Ethereum';
-
-const ChainButton = ({
-  chain,
-  chainAsset,
-  percentage,
-}: {
-  chain: string;
-  chainAsset: number;
-  percentage: number;
-}) => {
-  useEffect(() => {
-    if (chain === DefaultChain) {
-      amplitude.track('optimizer_display_chain_tab', {
-        chain: chain.toLowerCase(),
-        total_usd_value: chainAsset,
-      });
-    }
-  }, [chain, chainAsset]);
-
-  return (
-    <Button
-      bg="#2C2D33"
-      color="white"
-      borderRadius="32px"
-      p={2}
-      pr={4}
-      mr="16px"
-      display="flex"
-      alignItems="center"
-      _hover={{ bg: '#3C3D43' }}
-      onClick={() => {
-        amplitude.track('optimizer_click_chain_tab', {
-          chain: chain.toLowerCase(),
-          total_usd_value: chainAsset,
-        });
-      }}
-    >
-      <Flex align="center" mr={2}>
-        <CryptoIcon currency={chain} size="32px" mr="8px" />
-      </Flex>
-      <Flex direction="column">
-        <Text color="gray.300" textAlign="left">
-          {chain}
-        </Text>
-        <Flex mt={1} gap="8px">
-          <Text fontSize="14px" fontWeight="bold">
-            ${chainAsset}
-          </Text>
-          <Text fontSize="14px" color="gray.300" hidden={true}>
-            {percentage}%
-          </Text>
-        </Flex>
-      </Flex>
-    </Button>
-  );
-};
 
 const processDebankData = (
   chain: StakeChainType,
   debankData: DebankPortfolio
 ): {
-  chainUsdValues: { [key: string]: number };
+  chainUsdValues: { [key: number]: number };
   fromDataToken: FromData[];
   fromDataProtocol: FromData[];
   positionPairs: PositionPair[];
@@ -110,10 +52,14 @@ const processDebankData = (
   const fromDataToken: FromData[] = [];
   const fromDataProtocol: FromData[] = [];
 
+  Object.entries(debankData).forEach(([chainId, data]) => {
+    const usdValue = Number(data.usd_value);
+    if (usdValue > 0 && OptimizerSupportedChains[Number(chainId)]) {
+      chainUsdValues[Number(chainId)] = usdValue;
+    }
+  });
+
   const chainData = debankData[chain.id.toString()];
-  if (chainData.usd_value && !isNaN(Number(chainData.usd_value))) {
-    chainUsdValues[chain.id] = Number(chainData.usd_value);
-  }
   if (chainData.assets) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     chainData.assets.forEach((asset: any) => {
@@ -182,7 +128,6 @@ interface ProcessedDebankData {
 export default function Optimizer() {
   const { isConnected } = useConnector();
   const { address, chain, connector } = useAccount();
-  const config = useConfig();
   const toast = useToast();
   const [feedbackModal, setFeedbackModal] = useState<IFeedbackModalProps>(
     DEFAULT_FEEDBACK_MODAL_STATE
@@ -190,7 +135,7 @@ export default function Optimizer() {
   const [confirmModal, setConfirmModal] = useState<IConfirmModalProps>(
     DEFAULT_CONFIRM_MODAL_STATE
   );
-  const [chainAssets, setChainAssets] = useState<{ [key: string]: number }>({});
+  const [chainAssets, setChainAssets] = useState<{ [key: number]: number }>({});
   const [fromData, setFromData] = useState<FromData[]>();
   const [toData, setToData] = useState<ToData[] | undefined>(undefined);
   const [isToDataLoading, setIsToDataLoading] = useState<boolean>(false);
@@ -207,6 +152,7 @@ export default function Optimizer() {
       fromDataProtocol: [],
       positionPairs: [],
     });
+  const config = useConfig();
 
   useEffect(() => {
     setIsClient(true);
@@ -221,7 +167,6 @@ export default function Optimizer() {
         amplitude.identify(identify);
       }
     } else {
-      console.log('reset');
       setChainAssets({});
       setFromData(undefined);
       setToData(undefined);
@@ -235,9 +180,36 @@ export default function Optimizer() {
     }
   }, [address, connector]);
 
+  const onSwitchChain = async (chainId: number) => {
+    try {
+      setChainAssets({});
+      setFromData([]);
+      setToData(undefined);
+      setSelectedInputTokens({});
+      setSelectedToVault({});
+      setProcessedDebankData({
+        fromDataToken: [],
+        fromDataProtocol: [],
+        positionPairs: [],
+      });
+      await switchChain(config, {
+        chainId: chainId as (typeof config)['chains'][number]['id'],
+      });
+    } catch (error) {
+      console.error('Error switching chain:', error);
+      toast({
+        title: 'Error switching chain',
+        description: error instanceof Error ? error.message : String(error),
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
   const fetchDebankData = async (force: boolean = false, address: Address) => {
     if (!address) throw new Error('Address is required');
-    let url = `${baseApiUrl}/shift/address/${address}/summary`;
+    let url = `https://api-dev.bentobatch.com/v1/shift/address/${address}/summary`;
     if (force) {
       url += `?force=true`;
     }
@@ -276,7 +248,7 @@ export default function Optimizer() {
         });
       }
     },
-    [chain]
+    [chain, toast]
   );
 
   useEffect(() => {
@@ -285,7 +257,7 @@ export default function Optimizer() {
     if (!chainId) return;
 
     fetchPositions(address, false);
-  }, [chain, address, toast]);
+  }, [chain, address, toast, fetchPositions]);
 
   useEffect(() => {
     const fetchPositionMetadata = async () => {
@@ -394,9 +366,6 @@ export default function Optimizer() {
     (sum, value) => sum + value,
     0
   );
-  const ethereumPercentage = chainAssets['1']
-    ? ((chainAssets['1'] / totalAssets) * 100).toFixed(0)
-    : '0';
 
   const handleOptimizeModal = async () => {
     if (!address) return;
@@ -586,96 +555,68 @@ export default function Optimizer() {
 
         {isConnected && isClient && (
           <>
-            <Center display={{ base: 'none', md: 'flex' }} mt="24px">
-              {chainAssets && Object.keys(chainAssets).length > 0 && (
-                <ChainButton
-                  chain="Ethereum"
-                  chainAsset={Number(chainAssets['1']?.toFixed(2)) || 0}
-                  percentage={Number(ethereumPercentage)}
-                />
-              )}
-            </Center>
+            <ChainButtonList
+              selectedChainId={chain?.id}
+              chainAssets={chainAssets}
+              totalAssets={totalAssets}
+              onSwitchChain={onSwitchChain}
+            />
 
-            {chain?.id && chain.id !== 1 ? (
-              <Center>
-                <Button
-                  variant="primary"
-                  mt="24px"
-                  mb="48px"
-                  onClick={async () => {
-                    try {
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      await switchChain(config, { chainId: 1 as any });
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    } catch (e: any) {
-                      toast({
-                        title: e?.message,
-                        status: 'error',
-                        isClosable: true,
-                      });
-                    }
+            <Flex
+              gap="24px"
+              mt="24px"
+              direction={{ base: 'column', md: 'row' }}
+              margin="48px"
+            >
+              <Flex flex="1" direction="column" width="45%">
+                <Flex justify="space-between" align="center" mb={4}>
+                  <Text fontSize="30px" fontWeight="bold">
+                    From
+                  </Text>
+                </Flex>
+                <FromTable
+                  data={fromData || []}
+                  selectedInputTokens={selectedInputTokens}
+                  setSelectedInputTokens={(tokens) => {
+                    setToData(undefined);
+                    setSelectedToVault({});
+                    setSelectedInputTokens(tokens);
                   }}
-                >
-                  Switch to Ethereum
-                </Button>
-              </Center>
-            ) : (
-              <Flex
-                gap="24px"
-                mt="24px"
-                direction={{ base: 'column', md: 'row' }}
-                margin="48px"
-              >
-                <Flex flex="1" direction="column" width="45%">
-                  <Flex justify="space-between" align="center" mb={4}>
-                    <Text fontSize="30px" fontWeight="bold">
-                      From
-                    </Text>
-                  </Flex>
-                  <FromTable
-                    data={fromData || []}
-                    selectedInputTokens={selectedInputTokens}
-                    setSelectedInputTokens={(tokens) => {
-                      setToData(undefined);
-                      setSelectedToVault({});
-                      setSelectedInputTokens(tokens);
-                    }}
-                  />
-                </Flex>
-
-                <Flex flex="1" direction="column">
-                  <Flex justify="space-between" align="center" mb={4}>
-                    <Text fontSize="30px" fontWeight="bold">
-                      To
-                    </Text>
-                    <Button
-                      colorScheme="blue"
-                      size="md"
-                      borderRadius="full"
-                      fontSize="md"
-                      fontWeight="bold"
-                      _hover={{ bg: 'blue.400' }}
-                      onClick={handleOptimizeModal}
-                    >
-                      Optimize
-                    </Button>
-                  </Flex>
-                  {Object.keys(selectedInputTokens).length === 0 ? (
-                    <NothingToShowOptimizer
-                      title="No assets found"
-                      description="Please click one of left side (From) assets"
-                    />
-                  ) : (
-                    <ToTable
-                      selectedToVault={selectedToVault}
-                      setSelectedToVault={setSelectedToVault}
-                      data={toData}
-                      loading={isToDataLoading}
-                    />
-                  )}
-                </Flex>
+                />
               </Flex>
-            )}
+
+              <Flex flex="1" direction="column">
+                <Flex justify="space-between" align="center" mb={4}>
+                  <Text fontSize="30px" fontWeight="bold">
+                    To
+                  </Text>
+                  <Button
+                    colorScheme="blue"
+                    size="md"
+                    borderRadius="full"
+                    fontSize="md"
+                    fontWeight="bold"
+                    _hover={{ bg: 'blue.400' }}
+                    onClick={handleOptimizeModal}
+                  >
+                    Optimize
+                  </Button>
+                </Flex>
+                {Object.keys(selectedInputTokens).length === 0 ? (
+                  <NothingToShowOptimizer
+                    title="No assets found"
+                    description="Please click one of left side (From) assets"
+                  />
+                ) : (
+                  <ToTable
+                    selectedToVault={selectedToVault}
+                    setSelectedToVault={setSelectedToVault}
+                    data={toData}
+                    loading={isToDataLoading}
+                  />
+                )}
+              </Flex>
+            </Flex>
           </>
         )}
       </Flex>

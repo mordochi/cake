@@ -14,8 +14,6 @@ import {
   PopoverTrigger,
   Text,
 } from '@chakra-ui/react';
-import DotsIcon from '@icons/dots.svg';
-import ExternalLinkIcon from '@icons/externeal-link.svg';
 import {
   ColumnDef,
   SortingState,
@@ -28,6 +26,8 @@ import * as React from 'react';
 import { Address } from 'viem';
 import Table from '@/components/table';
 import { LEARN_MORE_DESC, Reward, VaultMetadata } from '@/optimizer/types';
+import DotsIcon from '@icons/dots.svg';
+import ExternalLinkIcon from '@icons/externeal-link.svg';
 import NothingToShowOptimizer from './NothingToShowOptimizer';
 import SkeletonTable from './SkeletonTable';
 import { formatTVL, normalizeAddress } from './types';

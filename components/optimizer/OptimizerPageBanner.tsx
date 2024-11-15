@@ -1,6 +1,6 @@
 import { Box, Center, Flex, Skeleton } from '@chakra-ui/react';
-import OptimizerGraphic from '@icons/optimizer-graphic.svg';
 import dynamic from 'next/dynamic';
+import OptimizerGraphic from '@icons/optimizer-graphic.svg';
 
 const DynamicProceedButton = dynamic(() => import('./BannerButton'), {
   ssr: false,

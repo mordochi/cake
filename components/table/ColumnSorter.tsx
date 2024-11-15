@@ -1,7 +1,7 @@
 import { IconButton } from '@chakra-ui/react';
+import { Column } from '@tanstack/react-table';
 import ChevronUpIcon from '@icons/chevron-up.svg';
 import SelectorIcon from '@icons/selector.svg';
-import { Column } from '@tanstack/react-table';
 
 interface ColumnButtonProps {
   column: Column<any, any>;

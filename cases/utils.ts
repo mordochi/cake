@@ -1,4 +1,3 @@
-import PublicClient from '@services/publicClient';
 import {
   Address,
   erc20Abi,
@@ -7,6 +6,7 @@ import {
   numberToHex,
   parseUnits,
 } from 'viem';
+import PublicClient from '@services/publicClient';
 import { ActionParam, ActionParamType, BentoChainType } from './types';
 
 export const decimalValidator =

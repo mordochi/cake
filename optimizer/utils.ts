@@ -7,7 +7,7 @@ import {
   formatUnits,
   getContract,
 } from 'viem';
-import { BentoChainType } from '@/models/cases/v3/types';
+import { BentoChainType } from '@/cases/types';
 import { NATIVE_TOKEN_ADDRESS } from './consts';
 import TOKEN_IMAGES from './tokenImages';
 import { Action, ActionType, Token, TxInfo } from './types';

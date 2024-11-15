@@ -6,8 +6,8 @@ import {
   getContract,
   isAddressEqual,
 } from 'viem';
+import { BentoChainType } from '@/cases/types';
 import { aprToApy } from '@/cases/utils';
-import { BentoChainType } from '@/models/cases/v3/types';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import { NATIVE_TOKEN_ADDRESS } from '../consts';

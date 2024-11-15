@@ -7,7 +7,7 @@ import {
   getContract,
   isAddressEqual,
 } from 'viem';
-import { BentoChainType } from '@/models/cases/v3/types';
+import { BentoChainType } from '@/cases/types';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import {

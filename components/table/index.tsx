@@ -9,8 +9,8 @@ import {
   Tooltip,
   Tr,
 } from '@chakra-ui/react';
-import HelpCircleIcon from '@icons/help-circle.svg';
 import { HeaderGroup, Row, flexRender } from '@tanstack/react-table';
+import HelpCircleIcon from '@icons/help-circle.svg';
 import { ColumnSorter } from './ColumnSorter';
 
 interface GenericTableProps<TData> extends TableProps {

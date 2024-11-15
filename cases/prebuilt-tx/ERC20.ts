@@ -1,6 +1,6 @@
-import PublicClient from '@services/publicClient';
 import { encodeFunctionData, erc20Abi, formatUnits, getContract } from 'viem';
 import { BentoChainType, PreviewTx, Tx } from '@/cases/types';
+import PublicClient from '@services/publicClient';
 import type { Address } from 'abitype';
 
 export const approveERC20PreviewTx: (params: {

@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { Suspense } from 'react';
-// import Footer from '@/components/footer';
-// import Header from '@/components/header';
+import Footer from '@/components/footer';
+import Header from '@/components/header';
 import getContentfulInfo from '@/services/contentful/getContentfulInfo';
 import { apiFetcher } from '@/utils/fetcher';
 import { Providers } from './providers';
@@ -29,7 +29,7 @@ export default async function RootLayout({
           contentfulData={contentfulData}
           caseStatsData={caseParticipantsData}
         >
-          {/* <Header /> */}
+          <Header />
           <Box minH="calc(100vh - 130px)">
             <Suspense>
               <Box mx="auto" minH="calc(100vh - 130px)">
@@ -37,7 +37,7 @@ export default async function RootLayout({
               </Box>
             </Suspense>
           </Box>
-          {/* <Footer /> */}
+          <Footer />
         </Providers>
       </body>
     </html>

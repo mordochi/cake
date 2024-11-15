@@ -1,4 +1,3 @@
-import PublicClient from '@services/publicClient';
 import {
   Abi,
   Address,
@@ -16,6 +15,7 @@ import {
 import { mainnet } from 'viem/chains';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
+import PublicClient from '@services/publicClient';
 import {
   Rounding,
   mulDivWithRounding,

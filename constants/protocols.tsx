@@ -1,3 +1,6 @@
+import Image, { StaticImageData } from 'next/image';
+import { FunctionComponent, SVGProps } from 'react';
+import { Protocol } from '@/cases/types';
 import _1inchIcon from '@icons/protocol/1inch.svg?url';
 import AaveIcon from '@icons/protocol/aave.svg?url';
 import AerodromeIcon from '@icons/protocol/aerodrome.svg?url';
@@ -26,9 +29,6 @@ import SyncSwapIcon from '@icons/protocol/sync-swap.svg?url';
 import YearnIcon from '@icons/protocol/yearn.svg?url';
 import ZircuitIcon from '@icons/protocol/zircuit.svg?url';
 import ZoraIcon from '@icons/protocol/zora.png';
-import Image, { StaticImageData } from 'next/image';
-import { FunctionComponent, SVGProps } from 'react';
-import { Protocol } from '@/cases/types';
 
 interface IProtocol {
   id: string;

@@ -1,26 +1,43 @@
 'use client';
 
 import { ChakraProvider } from '@chakra-ui/react';
-// import { CaseStatsProvider } from '@/context/caseStatsContext';
-// import { ContentfulProvider } from '@/context/contentfulContext';
+import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { WagmiProvider } from 'wagmi';
+import { CaseStatsProvider } from '@/context/caseStatsContext';
+import { ContentfulProvider } from '@/context/contentfulContext';
 import { theme, toastOptions } from '@/utils/theme';
+import { config } from '@/utils/wagmi';
 
 export function Providers({
   children,
-  //   contentfulData,
-  //   caseStatsData,
+  contentfulData,
+  caseStatsData,
 }: {
   children: React.ReactNode;
-  //   contentfulData: Parameters<typeof ContentfulProvider>[0]['data'];
-  //   caseStatsData: Parameters<typeof CaseStatsProvider>[0]['data'];
+  contentfulData: Parameters<typeof ContentfulProvider>[0]['data'];
+  caseStatsData: Parameters<typeof CaseStatsProvider>[0]['data'];
 }) {
   return (
-    // <ContentfulProvider data={contentfulData}>
-    //   <CaseStatsProvider data={caseStatsData}>
-    <ChakraProvider theme={theme} toastOptions={toastOptions}>
-      {children}
-    </ChakraProvider>
-    //   </CaseStatsProvider>
-    // </ContentfulProvider>
+    <ContentfulProvider data={contentfulData}>
+      <CaseStatsProvider data={caseStatsData}>
+        <WagmiProvider config={config}>
+          <QueryClientProvider client={new QueryClient()}>
+            <RainbowKitProvider
+              theme={darkTheme()}
+              modalSize="compact"
+              appInfo={{
+                appName: 'Cake Stake',
+              }}
+            >
+              <ChakraProvider theme={theme} toastOptions={toastOptions}>
+                {children}
+              </ChakraProvider>
+            </RainbowKitProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
+      </CaseStatsProvider>
+    </ContentfulProvider>
   );
 }

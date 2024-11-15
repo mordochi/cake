@@ -116,34 +116,7 @@ export default function Header({}) {
             <Link href="/">
               <Image src="/images/logo.svg" alt="Cake Stake" h="100%" />
             </Link>
-            <Center gap="8px" display={{ base: 'none', md: 'flex' }}>
-              <PageLink
-                href="/"
-                isCurrent={pathname === '/'}
-                title="Trading Strategies"
-              />
-              <PageLink
-                href="/dashboard"
-                isCurrent={pathname === '/dashboard'}
-                title="Dashboard"
-              />
-              <DesktopDropdown
-                pages={ALPHA_PAGES}
-                clickEventName="navbar_click_alpha"
-              >
-                🔥 Alpha
-              </DesktopDropdown>
-              <PageLink
-                href="/leaderboard"
-                isCurrent={pathname === '/leaderboard'}
-                title="LeaderBoard"
-              />
-              <PageLink
-                href="/optimizer"
-                isCurrent={pathname === '/optimizer'}
-                title="Optimizer"
-              />
-            </Center>
+            <Center gap="8px" display={{ base: 'none', md: 'flex' }}></Center>
           </Center>
 
           <Center gap="8px">
@@ -189,39 +162,7 @@ export default function Header({}) {
                   flexDirection="column"
                   px="32px"
                   sx={{ '> *': { borderBottom: '1px solid #22242B' } }}
-                >
-                  <PageLink
-                    href="/"
-                    isCurrent={pathname === '/'}
-                    title="Trading Strategies"
-                    onClick={onToggle}
-                  />
-                  <PageLink
-                    href="/dashboard"
-                    isCurrent={pathname === '/dashboard'}
-                    title="Dashboard"
-                    onClick={onToggle}
-                  />
-                  <MobileDropDown
-                    onClose={onToggle}
-                    pages={ALPHA_PAGES}
-                    clickEventName="navbar_click_alpha"
-                  >
-                    🔥 Alpha
-                  </MobileDropDown>
-                  <PageLink
-                    href="/leaderboard"
-                    isCurrent={pathname === '/leaderboard'}
-                    title="LeaderBoard"
-                    onClick={onToggle}
-                  />
-                  <PageLink
-                    href="/optimizer"
-                    isCurrent={pathname === '/optimizer'}
-                    title="Optimizer"
-                    onClick={onToggle}
-                  />
-                </Flex>
+                ></Flex>
 
                 <Footer inDropdown />
               </Flex>

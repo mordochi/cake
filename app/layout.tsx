@@ -31,7 +31,11 @@ export default async function RootLayout({
         >
           {/* <Header /> */}
           <Box minH="calc(100vh - 130px)">
-            <Suspense>{children}</Suspense>
+            <Suspense>
+              <Box mx="auto" minH="calc(100vh - 130px)">
+                {children}
+              </Box>
+            </Suspense>
           </Box>
           {/* <Footer /> */}
         </Providers>

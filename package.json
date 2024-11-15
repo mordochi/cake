@@ -10,6 +10,11 @@
     "format": "prettier --write \"**/*.{ts,tsx}\" && eslint . --ext .ts,.tsx --fix"
   },
   "dependencies": {
+    "@chakra-ui/next-js": "^2",
+    "@chakra-ui/react": "^2",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "framer-motion": "^11.11.15",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106"
@@ -22,7 +27,7 @@
     "eslint-config-next": "15.0.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "typescript": "^5",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "typescript": "^5"
   }
 }

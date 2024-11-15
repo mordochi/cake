@@ -1,6 +1,6 @@
 import { Address, encodeFunctionData, formatUnits, isAddressEqual } from 'viem';
 import { aprToApy } from '@/cases/utils';
-import { BentoChainType } from '@/models/cases/v3/types';
+import { StakeChainType } from '@/models/cases/v3/types';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import { NATIVE_TOKEN_ADDRESS } from '../consts';
@@ -27,7 +27,7 @@ export default class EtherFi implements DefiProtocol {
   isWithdrawalSupported = false;
 
   async getPositionInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address,
     outputTokenAddress: Address
   ): Promise<VaultMetadata> {
@@ -64,7 +64,7 @@ export default class EtherFi implements DefiProtocol {
   }
 
   async getVaultsInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address
   ): Promise<VaultMetadata[]> {
     const inputToken = await getTokenInfo(chain, inputTokenAddress);
@@ -95,7 +95,7 @@ export default class EtherFi implements DefiProtocol {
   }
 
   async getWithdrawalAmount(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _inputToken: Token,
     _outputToken: Token,
     _amount: bigint
@@ -104,7 +104,7 @@ export default class EtherFi implements DefiProtocol {
   }
 
   async withdraw(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _userAddress: Address,
     _inputToken: Token,
     _outputToken: Token,
@@ -114,7 +114,7 @@ export default class EtherFi implements DefiProtocol {
   }
 
   async deposit(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _userAddress: Address,
     inputToken: Token,
     _outputToken: Token,

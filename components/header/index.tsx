@@ -31,33 +31,6 @@ const ALPHA_PAGES: PageInfo[] = [
   },
 ];
 
-const TOKEN_PAGES: PageInfo[] = [
-  {
-    title: 'Airdrop',
-    href: '/airdrop/s1',
-    eventName: 'bento_menu_click_airdrop',
-    shouldActivate: true,
-  },
-  {
-    title: 'Vesting',
-    href: '/vesting',
-    eventName: 'bento_menu_click_vesting',
-    shouldActivate: true,
-  },
-  {
-    title: 'Staking',
-    href: '/staking',
-    eventName: 'bento_menu_click_staking',
-    shouldActivate: true,
-  },
-  {
-    title: 'Voting',
-    href: '/voting',
-    eventName: 'bento_menu_click_voting',
-    shouldActivate: false,
-  },
-];
-
 const PageLink = ({
   title,
   href,
@@ -141,7 +114,7 @@ export default function Header({}) {
         >
           <Center mr={{ base: '0', sm: '20px' }} gap="16px">
             <Link href="/">
-              <Image src="/images/logo.svg" alt="Bento Batch" h="100%" />
+              <Image src="/images/logo.svg" alt="Cake Stake" h="100%" />
             </Link>
             <Center gap="8px" display={{ base: 'none', md: 'flex' }}>
               <PageLink
@@ -170,14 +143,6 @@ export default function Header({}) {
                 isCurrent={pathname === '/optimizer'}
                 title="Optimizer"
               />
-              {process.env.NEXT_PUBLIC_TOKEN_PAGE_READY === 'true' && (
-                <DesktopDropdown
-                  pages={TOKEN_PAGES}
-                  clickEventName="navbar_click_bento"
-                >
-                  $BENTO
-                </DesktopDropdown>
-              )}
             </Center>
           </Center>
 
@@ -256,15 +221,6 @@ export default function Header({}) {
                     title="Optimizer"
                     onClick={onToggle}
                   />
-                  {process.env.NEXT_PUBLIC_TOKEN_PAGE_READY === 'true' && (
-                    <MobileDropDown
-                      onClose={onToggle}
-                      pages={TOKEN_PAGES}
-                      clickEventName="navbar_click_bento"
-                    >
-                      $BENTO
-                    </MobileDropDown>
-                  )}
                 </Flex>
 
                 <Footer inDropdown />

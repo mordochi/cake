@@ -48,6 +48,7 @@ export interface IFeedbackModalProps {
   isOpen: boolean;
   type: FeedbackType;
   onClose: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   displayEvent?: { eventName: string; eventProperties?: Record<string, any> };
 }
 

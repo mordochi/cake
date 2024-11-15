@@ -1,5 +1,5 @@
 import { Address, Hex } from 'viem';
-import { BentoChainType } from '@/models/cases/v3/types';
+import { StakeChainType } from '@/models/cases/v3/types';
 
 export const LEARN_MORE_DESC = 'Learn more';
 
@@ -113,26 +113,26 @@ export interface DefiProtocol {
 
   // `from` side - withdraw
   getPositionInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address,
     outputTokenAddress: Address
   ): Promise<VaultMetadata>;
 
   // `to` side - deposit
   getVaultsInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address
   ): Promise<VaultMetadata[]>;
 
   getWithdrawalAmount(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputToken: Token,
     outputToken: Token,
     amount: bigint
   ): Promise<bigint>;
 
   withdraw(
-    chain: BentoChainType,
+    chain: StakeChainType,
     userAddress: Address,
     inputToken: Token,
     outputToken: Token,
@@ -140,7 +140,7 @@ export interface DefiProtocol {
   ): Promise<PermitTx | TxInfo[]>;
 
   deposit(
-    chain: BentoChainType,
+    chain: StakeChainType,
     userAddress: Address,
     inputToken: Token,
     outputToken: Token,

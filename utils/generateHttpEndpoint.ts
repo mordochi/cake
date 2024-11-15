@@ -15,7 +15,7 @@ import {
   sepolia,
   zora,
 } from 'wagmi/chains';
-import { BentoChainType } from '@/cases/types';
+import { StakeChainType } from '@/cases/types';
 
 export const pectra = defineChain({
   // id: 7042905162,
@@ -84,7 +84,7 @@ const chainIdRpcMapping: {
 };
 
 export const chainIdChainMapping = CHAINS_CONFIG.reduce<
-  Record<number, BentoChainType>
+  Record<number, StakeChainType>
 >((acc, chain) => ({ ...acc, [chain.id]: chain }), {});
 
 const INFURA_KEY = process.env.NEXT_PUBLIC_INFURA_KEY;

@@ -4,6 +4,7 @@ import ChevronUpIcon from '@icons/chevron-up.svg';
 import SelectorIcon from '@icons/selector.svg';
 
 interface ColumnButtonProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   column: Column<any, any>;
 }
 

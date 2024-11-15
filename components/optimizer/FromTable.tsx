@@ -69,6 +69,7 @@ export function FromTable({
                 [tokenAddress]: fromData,
               });
             } else {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { [tokenAddress]: _, ...rest } = selectedInputTokens;
               setSelectedInputTokens(rest);
             }

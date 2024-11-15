@@ -1,5 +1,5 @@
 import { Address, formatUnits } from 'viem';
-import { BentoChainType } from '@/cases/types';
+import { StakeChainType } from '@/cases/types';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import {
@@ -40,7 +40,7 @@ const PENDLE_API_BASE_URL = 'https://api-v2.pendle.finance/core/v1';
  * @throws Error if the API request fails
  */
 export const fetchActiveMarkets = async (
-  chain: BentoChainType,
+  chain: StakeChainType,
   inputTokenAddress: Address
 ): Promise<Address[]> => {
   const url = `${PENDLE_API_BASE_URL}/${chain.id}/markets/active`;

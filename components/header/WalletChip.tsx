@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Center,
-  Icon,
   Image,
   Menu,
   MenuButton,
@@ -13,16 +12,14 @@ import {
   useClipboard,
   useToast,
 } from '@chakra-ui/react';
-import ChevronDownIcon from '@icons/chevron-down.svg';
-import CopyIcon from '@icons/copy.svg';
-import DisconnectIcon from '@icons/disconnect.svg';
-import BentoPtIcon from '@icons/protocol/bento-pt.svg';
 import { useEffect } from 'react';
 import { normalize } from 'viem/ens';
 import { useAccount, useDisconnect, useEnsAvatar, useEnsName } from 'wagmi';
 import useAutoConnect from '@/hooks/useAutoConnect';
-import usePoints from '@/hooks/usePoints';
 import useTrackModalConnect from '@/hooks/useTrackableConnectModal';
+import ChevronDownIcon from '@icons/chevron-down.svg';
+import CopyIcon from '@icons/copy.svg';
+import DisconnectIcon from '@icons/disconnect.svg';
 
 const List = () => {
   const { address, chain, connector } = useAccount();
@@ -33,7 +30,6 @@ const List = () => {
   });
   const { onCopy, hasCopied } = useClipboard(address || '');
   const toast = useToast();
-  const { user, isLoading, isError } = usePoints(address);
 
   useEffect(() => {
     if (hasCopied) {
@@ -84,14 +80,6 @@ const List = () => {
             />
           </Center>
         </Box>
-      </MenuItem>
-      <MenuItem>
-        <Icon w="16px" h="16px">
-          <BentoPtIcon />
-        </Icon>
-        {isLoading || isError || !user?.total_point
-          ? '-'
-          : `${user.total_point} BENTO BOX`}
       </MenuItem>
       <MenuDivider />
       <MenuItem

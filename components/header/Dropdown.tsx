@@ -14,7 +14,6 @@ import {
   MenuList,
   Text,
 } from '@chakra-ui/react';
-import ChevronDownIcon from '@icons/chevron-down.svg';
 import { usePathname } from 'next/navigation';
 import {
   Dispatch,
@@ -23,6 +22,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import ChevronDownIcon from '@icons/chevron-down.svg';
 
 export type PageInfo = {
   title: string;

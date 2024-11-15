@@ -1,6 +1,6 @@
 import { Address, encodeFunctionData, formatUnits, isAddressEqual } from 'viem';
 import { ReferalAccount } from '@/cases/constants';
-import { BentoChainType } from '@/cases/types';
+import { StakeChainType } from '@/cases/types';
 import { aprToApy } from '@/cases/utils';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
@@ -25,7 +25,7 @@ export default class Lido implements DefiProtocol {
   isWithdrawalSupported = false;
 
   async getPositionInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address,
     outputTokenAddress: Address
   ): Promise<VaultMetadata> {
@@ -62,7 +62,7 @@ export default class Lido implements DefiProtocol {
   }
 
   async getVaultsInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address
   ): Promise<VaultMetadata[]> {
     const inputToken = await getTokenInfo(chain, inputTokenAddress);
@@ -93,7 +93,7 @@ export default class Lido implements DefiProtocol {
   }
 
   getWithdrawalAmount(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _inputToken: Token,
     _outputToken: Token,
     _amount: bigint
@@ -102,7 +102,7 @@ export default class Lido implements DefiProtocol {
   }
 
   async withdraw(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _userAddress: Address,
     _inputToken: Token,
     _outputToken: Token,
@@ -112,7 +112,7 @@ export default class Lido implements DefiProtocol {
   }
 
   async deposit(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _userAddress: Address,
     inputToken: Token,
     _outputToken: Token,

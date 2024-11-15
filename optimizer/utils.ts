@@ -7,7 +7,7 @@ import {
   formatUnits,
   getContract,
 } from 'viem';
-import { BentoChainType } from '@/cases/types';
+import { StakeChainType } from '@/cases/types';
 import { NATIVE_TOKEN_ADDRESS } from './consts';
 import TOKEN_IMAGES from './tokenImages';
 import { Action, ActionType, Token, TxInfo } from './types';
@@ -46,7 +46,7 @@ export const getCachedData = async <T>(
  * @returns Token info or null if the token info is not found
  */
 export const getTokenInfo = async (
-  chain: BentoChainType,
+  chain: StakeChainType,
   tokenAddress: Address
 ): Promise<Token | null> => {
   return getCachedData(`getTokenInfo-${chain.id}-${tokenAddress}`, async () => {
@@ -91,7 +91,7 @@ export const getTokenInfo = async (
 };
 
 export const approveERC20TxIfNeeded = async (
-  chain: BentoChainType,
+  chain: StakeChainType,
   userAddress: Address,
   token: Token,
   spenderAddress: Address,
@@ -135,7 +135,7 @@ export const approveERC20Tx = (
 };
 
 export const allowance = async (
-  chain: BentoChainType,
+  chain: StakeChainType,
   userAddress: Address,
   tokenAddress: Address,
   spenderAddress: Address

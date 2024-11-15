@@ -87,6 +87,7 @@ export function ToTable({
                 [tokenAddress]: vault,
               });
             } else {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { [tokenAddress]: _, ...rest } = selectedToVault;
               setSelectedToVault(rest);
             }

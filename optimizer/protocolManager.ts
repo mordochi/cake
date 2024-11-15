@@ -1,5 +1,5 @@
 import { Address } from 'viem';
-import { BentoChainType } from '@/cases/types';
+import { StakeChainType } from '@/cases/types';
 import Aave from './protocols/aave';
 import Ethena from './protocols/ethena';
 import Etherfi from './protocols/etherfi';
@@ -47,7 +47,7 @@ class ProtocolManager {
   }
 
   public async getPositionsMetadata(
-    chain: BentoChainType,
+    chain: StakeChainType,
     protocolPairs: PositionPair[]
   ): Promise<VaultMetadata[]> {
     const promises = protocolPairs.map((pair) => {
@@ -63,7 +63,7 @@ class ProtocolManager {
   }
 
   public async getVaultsMetadata(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address
   ): Promise<VaultMetadata[]> {
     const promises = Object.values(this.protocols)
@@ -76,7 +76,7 @@ class ProtocolManager {
 
   public async withdraw(
     protocolId: string,
-    chain: BentoChainType,
+    chain: StakeChainType,
     userAddress: Address,
     inputToken: Token,
     outputToken: Token,
@@ -103,7 +103,7 @@ class ProtocolManager {
 
   public deposit(
     protocolId: string,
-    chain: BentoChainType,
+    chain: StakeChainType,
     userAddress: Address,
     inputToken: Token,
     outputToken: Token,

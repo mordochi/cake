@@ -7,7 +7,7 @@ import {
   isAddressEqual,
 } from 'viem';
 import { mainnet } from 'viem/chains';
-import { BentoChainType } from '@/cases/types';
+import { StakeChainType } from '@/cases/types';
 import { aprToApy } from '@/cases/utils';
 import { MAX_UINT256, NATIVE_TOKEN_ADDRESS, RAY_DECIMALS } from '../consts';
 import {
@@ -33,7 +33,7 @@ export default class Aave implements DefiProtocol {
   isWithdrawalSupported = true;
 
   async getPositionInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address,
     outputTokenAddress: Address
   ): Promise<VaultMetadata> {
@@ -70,7 +70,7 @@ export default class Aave implements DefiProtocol {
   }
 
   async getVaultsInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address
   ): Promise<VaultMetadata[]> {
     const inputToken = await getTokenInfo(chain, inputTokenAddress);
@@ -101,7 +101,7 @@ export default class Aave implements DefiProtocol {
   }
 
   async getWithdrawalAmount(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _inputToken: Token,
     _outputToken: Token,
     amount: bigint
@@ -110,7 +110,7 @@ export default class Aave implements DefiProtocol {
   }
 
   async withdraw(
-    chain: BentoChainType,
+    chain: StakeChainType,
     userAddress: Address,
     inputToken: Token,
     outputToken: Token,
@@ -212,7 +212,7 @@ export default class Aave implements DefiProtocol {
   }
 
   async deposit(
-    chain: BentoChainType,
+    chain: StakeChainType,
     userAddress: Address,
     inputToken: Token,
     _outputToken: Token,
@@ -299,7 +299,7 @@ export default class Aave implements DefiProtocol {
   }
 
   private async getAPY(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputToken: Token
   ): Promise<number> {
     const address =
@@ -313,7 +313,7 @@ export default class Aave implements DefiProtocol {
   }
 
   private async getTVL(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputToken: Token
   ): Promise<number> {
     const address =
@@ -329,7 +329,7 @@ export default class Aave implements DefiProtocol {
   }
 
   private async getReserveData(
-    chain: BentoChainType,
+    chain: StakeChainType,
     tokenAddress: Address
   ): Promise<{
     accruedToTreasuryScaled: bigint;
@@ -358,7 +358,7 @@ export default class Aave implements DefiProtocol {
   }
 
   private async getATokenTotalSupply(
-    chain: BentoChainType,
+    chain: StakeChainType,
     tokenAddress: Address
   ): Promise<bigint> {
     const client = PublicClient.get(chain);
@@ -375,7 +375,7 @@ export default class Aave implements DefiProtocol {
   }
 
   private async getTokenPrice(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address
   ): Promise<bigint> {
     const client = PublicClient.get(chain);

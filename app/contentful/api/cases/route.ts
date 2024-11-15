@@ -1,5 +1,4 @@
-export const dynamic =
-  process.env.NEXT_PUBLIC_APP_ENV !== 'production' ? 'force-dynamic' : 'auto';
+export const dynamic = 'force-dynamic';
 
 import { BatchCaseInContentful } from '@/cases/types';
 import { formatCases } from '@/services/case/formatCase';
@@ -22,6 +21,7 @@ export async function GET(request: Request) {
     });
 
     return Response.json({ cases: formatCases(response) });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return Response.json(
       { error: error?.message || 'Unknown error' },

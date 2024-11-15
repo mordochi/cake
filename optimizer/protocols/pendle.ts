@@ -1,5 +1,5 @@
 import { Address } from 'viem';
-import { BentoChainType } from '@/models/cases/v3/types';
+import { StakeChainType } from '@/models/cases/v3/types';
 import { DefiProtocol, PermitTx, Token, TxInfo, VaultMetadata } from '../types';
 import { approveERC20Tx } from '../utils';
 import {
@@ -16,7 +16,7 @@ export default class Pendle implements DefiProtocol {
   isWithdrawalSupported = PENDLE.isWithdrawalSupported;
 
   async getPositionInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address,
     outputTokenAddress: Address
   ): Promise<VaultMetadata> {
@@ -29,7 +29,7 @@ export default class Pendle implements DefiProtocol {
   }
 
   async getVaultsInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address
   ): Promise<VaultMetadata[]> {
     // Fetch active markets filtered by input token address
@@ -48,7 +48,7 @@ export default class Pendle implements DefiProtocol {
   }
 
   getWithdrawalAmount(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _inputToken: Token,
     _outputToken: Token,
     _amount: bigint
@@ -57,7 +57,7 @@ export default class Pendle implements DefiProtocol {
   }
 
   withdraw(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _userAddress: Address,
     _inputToken: Token,
     _outputToken: Token,
@@ -67,7 +67,7 @@ export default class Pendle implements DefiProtocol {
   }
 
   async deposit(
-    chain: BentoChainType,
+    chain: StakeChainType,
     userAddress: Address,
     inputToken: Token,
     outputToken: Token,

@@ -1,3 +1,4 @@
+import PublicClient from '@services/publicClient';
 import {
   Address,
   erc20Abi,
@@ -6,8 +7,7 @@ import {
   numberToHex,
   parseUnits,
 } from 'viem';
-import PublicClient from '@services/publicClient';
-import { ActionParam, ActionParamType, BentoChainType } from './types';
+import { ActionParam, ActionParamType, StakeChainType } from './types';
 
 export const decimalValidator =
   (decimal: number, min?: bigint, max?: bigint) => (value: string) => {
@@ -46,7 +46,7 @@ export const integerValidator = (value: string) => {
 
 export const getDecimals = async (
   tokenAddress: Address,
-  chain: BentoChainType
+  chain: StakeChainType
 ) => {
   const client = PublicClient.get(chain);
 

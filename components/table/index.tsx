@@ -32,6 +32,7 @@ function GenericTable<TData>({
         {table.getHeaderGroups().map((headerGroup) => (
           <Tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               const meta: any = header.column.columnDef.meta;
               // check all rows.original[header.column.columnDef.meta.checkSortKey] is true
               const canShowSortIcon = meta?.checkSortKey
@@ -89,6 +90,7 @@ function GenericTable<TData>({
         {table.getRowModel().rows.map((row) => (
           <Tr key={row.id} onClick={() => tbodyTrHandler(row)}>
             {row.getVisibleCells().map((cell) => {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               const meta: any = cell.column.columnDef.meta;
               return (
                 <Td

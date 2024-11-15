@@ -6,7 +6,7 @@ import {
   getContract,
   isAddressEqual,
 } from 'viem';
-import { BentoChainType } from '@/cases/types';
+import { StakeChainType } from '@/cases/types';
 import { aprToApy } from '@/cases/utils';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
@@ -32,7 +32,7 @@ export default class RocketPool implements DefiProtocol {
   isWithdrawalSupported = true;
 
   async getPositionInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address,
     outputTokenAddress: Address
   ): Promise<VaultMetadata> {
@@ -69,7 +69,7 @@ export default class RocketPool implements DefiProtocol {
   }
 
   async getVaultsInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address
   ): Promise<VaultMetadata[]> {
     const inputToken = await getTokenInfo(chain, inputTokenAddress);
@@ -100,7 +100,7 @@ export default class RocketPool implements DefiProtocol {
   }
 
   async getWithdrawalAmount(
-    chain: BentoChainType,
+    chain: StakeChainType,
     _inputToken: Token,
     _outputToken: Token,
     amount: bigint
@@ -115,7 +115,7 @@ export default class RocketPool implements DefiProtocol {
   }
 
   async withdraw(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _userAddress: Address,
     inputToken: Token,
     outputToken: Token,
@@ -145,7 +145,7 @@ export default class RocketPool implements DefiProtocol {
   }
 
   async deposit(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _userAddress: Address,
     inputToken: Token,
     _outputToken: Token,

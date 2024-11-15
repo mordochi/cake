@@ -15,7 +15,12 @@ import {
   sepolia,
   zora,
 } from 'wagmi/chains';
+import { WalletType } from '@/cases/types';
 import generateHttpEndpoint, { CHAINS, pectra } from './generateHttpEndpoint';
+
+export const walletTypes: Record<string, WalletType> = {
+  metaMask: WalletType.EOA,
+};
 
 // NOTE: make sure to update the walletTypes object above when adding new wallets
 const connectors = connectorsForWallets(

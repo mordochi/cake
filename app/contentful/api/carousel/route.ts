@@ -1,5 +1,4 @@
-export const dynamic =
-  process.env.NEXT_PUBLIC_APP_ENV !== 'production' ? 'force-dynamic' : 'auto';
+export const dynamic = 'force-dynamic';
 
 import { Asset } from 'contentful';
 import { BATCH_CAROUSEL, CarouselEntrySkeleton } from '@/types/contentful';
@@ -26,6 +25,7 @@ export async function GET() {
       );
 
     return Response.json(response);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return Response.json(
       { error: error?.message || 'Get Contentful Unknown error' },

@@ -1,5 +1,4 @@
-export const dynamic =
-  process.env.NEXT_PUBLIC_APP_ENV !== 'production' ? 'force-dynamic' : 'auto';
+export const dynamic = 'force-dynamic';
 
 import { Asset } from 'contentful';
 import {
@@ -24,6 +23,7 @@ export type GetCaseFiltersResponse = {
   tags: Tag[];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(_: Request) {
   try {
     const [protocols, tags] = await Promise.all([
@@ -54,6 +54,7 @@ export async function GET(_: Request) {
     ]);
 
     return Response.json({ protocols, tags });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return Response.json(
       { error: error?.message || 'Unknown error' },

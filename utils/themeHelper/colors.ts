@@ -1,5 +1,5 @@
 const colors = {
-  bentoBlue: {
+  customBlue: {
     100: '#2B50FF',
     200: '#2B50FF',
     300: '#2B50FF',

@@ -7,7 +7,7 @@ import {
   getContract,
   isAddressEqual,
 } from 'viem';
-import { BentoChainType } from '@/cases/types';
+import { StakeChainType } from '@/cases/types';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import {
@@ -30,7 +30,7 @@ export default class Ethena implements DefiProtocol {
   isWithdrawalSupported = false;
 
   async getPositionInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address,
     outputTokenAddress: Address
   ): Promise<VaultMetadata> {
@@ -67,7 +67,7 @@ export default class Ethena implements DefiProtocol {
   }
 
   async getVaultsInfo(
-    chain: BentoChainType,
+    chain: StakeChainType,
     inputTokenAddress: Address
   ): Promise<VaultMetadata[]> {
     const inputToken = await getTokenInfo(chain, inputTokenAddress);
@@ -98,7 +98,7 @@ export default class Ethena implements DefiProtocol {
   }
 
   async getWithdrawalAmount(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _inputToken: Token,
     _outputToken: Token,
     _amount: bigint
@@ -107,7 +107,7 @@ export default class Ethena implements DefiProtocol {
   }
 
   async withdraw(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     _userAddress: Address,
     _inputToken: Token,
     _outputToken: Token,
@@ -117,7 +117,7 @@ export default class Ethena implements DefiProtocol {
   }
 
   async deposit(
-    _chain: BentoChainType,
+    _chain: StakeChainType,
     userAddress: Address,
     inputToken: Token,
     _outputToken: Token,
@@ -155,7 +155,7 @@ export default class Ethena implements DefiProtocol {
     return res.stakingYield.value / 100;
   }
 
-  private async getTVL(chain: BentoChainType): Promise<number> {
+  private async getTVL(chain: StakeChainType): Promise<number> {
     const client = PublicClient.get(chain);
     const usde = getContract({
       address: this.usdeAddr,

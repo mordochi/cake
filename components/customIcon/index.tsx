@@ -9,6 +9,7 @@ import Polygon from './components/PolygonIcon';
 import Scroll from './components/ScrollIcon';
 import Zora from './components/ZoraIcon';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomIcons: Record<string, any> = {
   Blast: (props: IconProps) => <Blast {...props} />,
   Scroll: (props: IconProps) => <Scroll {...props} />,

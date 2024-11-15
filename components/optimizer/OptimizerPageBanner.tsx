@@ -32,7 +32,7 @@ const OptimizerPageBanner = () => {
                 fontFamily="heading"
                 textAlign="left"
               >
-                Bento Optimizer
+                Optimizer
               </Box>
               <Box
                 width="560px"
@@ -54,9 +54,8 @@ const OptimizerPageBanner = () => {
                 fontFamily="body"
                 textAlign="left"
               >
-                Streamline your DeFi journey for free with Bento Optimizer.
-                Discover top strategies and maximize your rewards — all in one
-                place.
+                Streamline your DeFi journey for free with Optimizer. Discover
+                top strategies and maximize your rewards — all in one place.
               </Box>
             </Flex>
 

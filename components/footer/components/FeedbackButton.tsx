@@ -5,9 +5,6 @@ import iconFeedback from '@icons/feedback.png';
 const FeedbackButton = () => {
   return (
     <Button
-      as="a"
-      href="https://bento-batch.canny.io/feedback"
-      target="_blank"
       size="xs"
       variant="secondary"
       width="fit-content"

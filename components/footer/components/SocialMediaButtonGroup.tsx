@@ -1,33 +1,9 @@
 import { track } from '@amplitude/analytics-browser';
 import { Link } from '@chakra-ui/next-js';
 import { Grid } from '@chakra-ui/react';
-import FarcasterIcon from '@icons/farcaster.svg';
-import ParagraphIcon from '@icons/paragraph.svg';
-import TelegramIcon from '@icons/telegram.svg';
-import TwitterIcon from '@icons/twitter.svg';
 
-const SocialMedias = [
-  {
-    href: 'https://x.com/bentobatch',
-    name: 'Twitter',
-    icon: <TwitterIcon />,
-  },
-  {
-    href: 'https://t.me/bentobatch',
-    name: 'Telegram',
-    icon: <TelegramIcon />,
-  },
-  {
-    href: 'https://warpcast.com/bentobatch',
-    name: 'Farcaster',
-    icon: <FarcasterIcon />,
-  },
-  {
-    href: 'https://paragraph.xyz/@bentobatch',
-    name: 'Paragraph',
-    icon: <ParagraphIcon />,
-  },
-];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const SocialMedias: any[] = [];
 
 const SocialMediaButtonGroup = () => {
   return (

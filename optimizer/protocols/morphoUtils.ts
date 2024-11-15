@@ -4,7 +4,7 @@ import {
   erc20TransferFromCalldata,
   erc4626DepositCallData,
 } from '@/cases/prebuilt-tx/morpho';
-import { BentoChainType } from '@/cases/types';
+import { StakeChainType } from '@/cases/types';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import {
@@ -69,7 +69,7 @@ const VAULTS_QUERY = `query Vaults($where: VaultFilters, $orderBy: VaultOrderBy)
  * @returns Vaults data
  */
 export const fetchVaultsByInToken = async (
-  chain: BentoChainType,
+  chain: StakeChainType,
   inTokenAddress: Address
 ): Promise<Vault[]> => {
   const variables = {
@@ -98,7 +98,7 @@ export const fetchVaultsByInToken = async (
  * @returns Vault data
  */
 export const fetchVaultByTokens = async (
-  chain: BentoChainType,
+  chain: StakeChainType,
   inTokenAddress: Address,
   outTokenAddress: Address
 ): Promise<Vault> => {
@@ -130,7 +130,7 @@ export const fetchVaultByTokens = async (
  * @returns Extracted vaults data
  */
 const extractVaultsData = (
-  chain: BentoChainType,
+  chain: StakeChainType,
   vaults: any[]
 ): Promise<Vault[]> =>
   Promise.all(vaults.map((vault) => mapVaultData(chain, vault)));
@@ -142,7 +142,7 @@ const extractVaultsData = (
  * @returns Structured Vault object
  */
 const mapVaultData = async (
-  chain: BentoChainType,
+  chain: StakeChainType,
   vault: Record<string, any>
 ): Promise<Vault> => {
   const outputToken = await getTokenInfo(chain, vault.address);
@@ -179,7 +179,7 @@ const mapTokenData = (tokenData: Record<string, any>): Token => ({
 });
 
 export const getMorphoMulticallTx = async (params: {
-  chain: BentoChainType;
+  chain: StakeChainType;
   inputToken: Token;
   outputToken: Token;
   userAddress: Address;

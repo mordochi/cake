@@ -317,7 +317,7 @@ export const theme = extendTheme({
         },
       },
       defaultProps: {
-        colorScheme: 'bentoBlue',
+        colorScheme: 'customBlue',
       },
     },
     Tag,

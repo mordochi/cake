@@ -1,3 +1,4 @@
+import PublicClient from '@services/publicClient';
 import {
   Abi,
   Address,
@@ -15,14 +16,13 @@ import {
 import { mainnet } from 'viem/chains';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
-import PublicClient from '@services/publicClient';
 import {
   Rounding,
   mulDivWithRounding,
   toAssetsUp,
   toSharesDown,
 } from '../math';
-import { BentoChainType, PreviewTx, Tx } from '../types';
+import { PreviewTx, StakeChainType, Tx } from '../types';
 import EthereumBundlerV2 from './abi/EthereumBundlerV2.json';
 import MetaMorpho from './abi/MetaMorpho.json';
 import Morpho from './abi/Morpho.json';
@@ -140,7 +140,7 @@ export const erc4626DepositCallData = async ({
   morphoVault,
   userAddress,
 }: {
-  chain: BentoChainType;
+  chain: StakeChainType;
   inputToken: InputToken;
   morphoVault: Address;
   userAddress: Address;
@@ -196,7 +196,7 @@ export const erc4626RedeemCallData = async ({
   receiver,
   owner,
 }: {
-  chain: BentoChainType;
+  chain: StakeChainType;
   morphoVault: Address;
   shares: bigint;
   receiver: Address;
@@ -250,7 +250,7 @@ export const depositEthMulticallTx = async ({
   vaultName,
   userAddress,
 }: {
-  chain: BentoChainType;
+  chain: StakeChainType;
   inputAmount: bigint;
   morphoVault: Address;
   vaultName: string;
@@ -298,7 +298,7 @@ export const erc4626RedeemMulticallTx = async ({
   receiver,
   owner,
 }: {
-  chain: BentoChainType;
+  chain: StakeChainType;
   shares: bigint;
   redeemVault: Address;
   vaultName: string;
@@ -379,7 +379,7 @@ export const wrapToMulticallTx = ({
 };
 
 export const isAuthorized: (params: {
-  chain: BentoChainType;
+  chain: StakeChainType;
   userAddress: Address;
   bundlerAddress: Address;
 }) => Promise<boolean> = async (params) => {
@@ -511,7 +511,7 @@ export const calculateMarketId = (
 
 export const getMarketInfo = async (
   params: MarketParams,
-  chain: BentoChainType
+  chain: StakeChainType
 ): Promise<{
   totalSupplyAssets: bigint;
   totalSupplyShares: bigint;
@@ -559,7 +559,7 @@ export const getMarketInfo = async (
 };
 
 export const repayCalldata: (params: {
-  chain: BentoChainType;
+  chain: StakeChainType;
   loanToken: Address;
   collateralToken: Address;
   oracle: Address;

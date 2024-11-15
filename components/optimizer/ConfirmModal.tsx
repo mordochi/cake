@@ -148,6 +148,7 @@ export default function ConfirmModal({
           tx_hash: transactionReceipt.transactionHash,
         });
         setActiveStep(nextStepIndex + 1);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         if (error.message.includes('User rejected the request.')) {
           toast({
@@ -213,6 +214,7 @@ export default function ConfirmModal({
             setActiveStep(activeStep + 1);
             break;
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         if (error.message.includes('User rejected the request.')) {
           toast({

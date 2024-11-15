@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import Image, { StaticImageData } from 'next/image';
 import { FunctionComponent, SVGProps } from 'react';
 import { Protocol } from '@/cases/types';
@@ -45,7 +47,7 @@ interface IProtocol {
 const IconComponent = (iconPath: string | StaticImageData, alt: string) => {
   // eslint-disable-next-line react/display-name
   return (props: SVGProps<SVGElement>) => (
-    // @ts-ignore
+    // @ts-expect-error skip this error
     <Image src={iconPath} alt={alt} {...props} />
   );
 };

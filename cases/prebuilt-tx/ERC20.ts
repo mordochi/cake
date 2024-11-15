@@ -1,6 +1,6 @@
-import { encodeFunctionData, erc20Abi, formatUnits, getContract } from 'viem';
-import { BentoChainType, PreviewTx, Tx } from '@/cases/types';
 import PublicClient from '@services/publicClient';
+import { encodeFunctionData, erc20Abi, formatUnits, getContract } from 'viem';
+import { PreviewTx, StakeChainType, Tx } from '@/cases/types';
 import type { Address } from 'abitype';
 
 export const approveERC20PreviewTx: (params: {
@@ -25,7 +25,7 @@ export const approveERC20PreviewTx: (params: {
  * @returns Promise of Tx or undefined
  */
 export const approveERC20TxIfNeeded: (params: {
-  chain: BentoChainType;
+  chain: StakeChainType;
   userAddress: Address;
   tokenAddress: Address;
   tokenSymbol: string;
@@ -120,7 +120,7 @@ export const transferTx: (params: {
 };
 
 export const allowance: (params: {
-  chain: BentoChainType;
+  chain: StakeChainType;
   userAddress: Address;
   tokenAddress: Address;
   spenderAddress: Address;
@@ -139,7 +139,7 @@ export const allowance: (params: {
 };
 
 export const balanceOf: (params: {
-  chain: BentoChainType;
+  chain: StakeChainType;
   userAddress: Address;
   tokenAddress: Address;
 }) => Promise<bigint> = async (params) => {

@@ -105,23 +105,23 @@ export type ZapInput = {
   srcTokenAddress: Address;
   srcAmount: string;
 };
-export type BentoChainType = (typeof CHAINS)[number];
+export type StakeChainType = (typeof CHAINS)[number];
 
 export type CustomPublicClientType = PublicClientType<
   Transport,
-  BentoChainType
+  StakeChainType
 >;
 
 export type Context = {
   account: UseAccountReturnType;
-  chain: BentoChainType;
+  chain: StakeChainType;
   inputs: Inputs;
   zapInputs: (ZapInput | undefined)[];
   /**
    * if the case is opened cross chain zap in,
    * srcChain is the chain where the user is currently executed the transaction
    */
-  srcChain?: BentoChainType | undefined;
+  srcChain?: StakeChainType | undefined;
 };
 
 export type TxRenderer = (context: Context) => Promise<Tx[]>;

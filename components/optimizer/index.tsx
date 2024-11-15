@@ -5,13 +5,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
 import { switchChain } from 'wagmi/actions';
-import { BentoChainType } from '@/cases/types';
+import { StakeChainType } from '@/cases/types';
 import CryptoIcon from '@/components/CryptoIcon';
 import FeedbackModal, {
   DEFAULT_FEEDBACK_MODAL_STATE,
   FeedbackType,
   IFeedbackModalProps,
 } from '@/components/optimizer/FeedbackModal';
+import { baseApiUrl } from '@/constants';
 import useConnector from '@/hooks/useConnector';
 import ProtocolManager from '@/optimizer/protocolManager';
 import {
@@ -95,7 +96,7 @@ const ChainButton = ({
 };
 
 const processDebankData = (
-  chain: BentoChainType,
+  chain: StakeChainType,
   debankData: DebankPortfolio
 ): {
   chainUsdValues: { [key: string]: number };
@@ -114,6 +115,7 @@ const processDebankData = (
     chainUsdValues[chain.id] = Number(chainData.usd_value);
   }
   if (chainData.assets) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     chainData.assets.forEach((asset: any) => {
       if (asset.protocol?.id) {
         const pair = {
@@ -235,7 +237,7 @@ export default function Optimizer() {
 
   const fetchDebankData = async (force: boolean = false, address: Address) => {
     if (!address) throw new Error('Address is required');
-    let url = `https://api-dev.bentobatch.com/v1/shift/address/${address}/summary`;
+    let url = `${baseApiUrl}/shift/address/${address}/summary`;
     if (force) {
       url += `?force=true`;
     }
@@ -254,6 +256,7 @@ export default function Optimizer() {
           fromDataToken,
           fromDataProtocol,
           positionPairs,
+          // @ts-expect-error skip this error
         } = processDebankData(chain, debankData);
 
         setChainAssets(chainUsdValues);
@@ -295,6 +298,7 @@ export default function Optimizer() {
         return;
 
       const postionMetas = await protocolManager.getPositionsMetadata(
+        // @ts-expect-error skip this error
         chain,
         processedDebankData.positionPairs
       );
@@ -347,7 +351,7 @@ export default function Optimizer() {
           async (tokenAddress) => {
             const protocolManager = ProtocolManager.getInstance();
             const vaultsMetadata = await protocolManager.getVaultsMetadata(
-              chain as BentoChainType,
+              chain as StakeChainType,
               tokenAddress as Address
             );
             return vaultsMetadata.map(
@@ -461,7 +465,7 @@ export default function Optimizer() {
         );
         const withdrawal = await protocolManager.withdraw(
           fromData.protocolId,
-          chain as BentoChainType,
+          chain as StakeChainType,
           address as Address,
           {
             address: tokenAddress as Address,
@@ -477,6 +481,7 @@ export default function Optimizer() {
           },
           amountBigInt
         );
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         Array.isArray(withdrawal.txs)
           ? allTxs.push(...withdrawal.txs)
           : allTxs.push(withdrawal.txs);
@@ -496,7 +501,7 @@ export default function Optimizer() {
 
         const deposits = await protocolManager.deposit(
           vaultData.protocol.id,
-          chain as BentoChainType,
+          chain as StakeChainType,
           address as Address,
           {
             address: vaultData.inputToken.address,
@@ -599,7 +604,9 @@ export default function Optimizer() {
                   mb="48px"
                   onClick={async () => {
                     try {
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       await switchChain(config, { chainId: 1 as any });
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     } catch (e: any) {
                       toast({
                         title: e?.message,

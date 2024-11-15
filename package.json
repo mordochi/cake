@@ -10,6 +10,7 @@
     "format": "prettier --write \"**/*.{ts,tsx}\" && eslint . --ext .ts,.tsx --fix"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.11.9",
     "@chakra-ui/next-js": "^2",
     "@chakra-ui/react": "^2",
     "@emotion/react": "^11.13.3",

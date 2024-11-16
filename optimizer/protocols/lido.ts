@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Address, encodeFunctionData, formatUnits, isAddressEqual } from 'viem';
-import { ReferalAccount } from '@/cases/constants';
 import { StakeChainType } from '@/cases/types';
 import { aprToApy } from '@/cases/utils';
 import { apiCaller } from '@/utils/apiCaller';
@@ -135,7 +134,7 @@ export default class Lido implements DefiProtocol {
         data: encodeFunctionData({
           abi: LidoAbi,
           functionName: 'submit',
-          args: [ReferalAccount],
+          args: [],
         }),
       },
     ];

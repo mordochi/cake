@@ -45,7 +45,7 @@ export const fetchActiveMarkets = async (
   chain: StakeChainType,
   inputTokenAddress: Address
 ): Promise<Address[]> => {
-  const url = `${PENDLE_API_BASE_URL}/${chain.id}/markets/active`;
+  const url = `${PENDLE_API_BASE_URL}/${CHAIN_INFO_ID[chain.id] ?? chain.id}/markets/active`;
   try {
     const response = await fetch(url);
     if (!response.ok) {

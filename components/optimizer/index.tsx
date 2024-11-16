@@ -1,9 +1,23 @@
 'use client';
 import * as amplitude from '@amplitude/analytics-browser';
-import { Button, Flex, Text, useToast } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  IconButton,
+  Image,
+  Text,
+  useToast,
+} from '@chakra-ui/react';
+import {
+  darkWidgetTheme,
+  ENV,
+  MODAL_POSITION_TYPE,
+  SubscriptionManager,
+  WidgetUIProvider,
+} from '@pushprotocol/uiweb';
 import { useCallback, useEffect, useState } from 'react';
 import { Address } from 'viem';
-import { useAccount, useConfig } from 'wagmi';
+import { useAccount, useConfig, useWalletClient } from 'wagmi';
 import { switchChain } from 'wagmi/actions';
 import { StakeChainType } from '@/cases/types';
 import useConnector from '@/hooks/useConnector';
@@ -16,6 +30,7 @@ import {
 } from '@/optimizer/types';
 import { Reward } from '@/optimizer/types';
 import { CHAIN_INFO_ID } from '@/utils/generateHttpEndpoint';
+import NotificationIcon from '@icons/notification.png';
 import { ChainButtonList } from './ChainButtonList';
 import ConfirmModal, {
   DEFAULT_CONFIRM_MODAL_STATE,
@@ -123,6 +138,7 @@ export default function Optimizer() {
   const [confirmModal, setConfirmModal] = useState<IConfirmModalProps>(
     DEFAULT_CONFIRM_MODAL_STATE
   );
+  const [notificationModal, setNotificationModal] = useState<boolean>(false);
   const [chainAssets, setChainAssets] = useState<{ [key: number]: number }>({});
   const [fromData, setFromData] = useState<FromData[]>();
   const [toData, setToData] = useState<ToData[] | undefined>(undefined);
@@ -556,17 +572,27 @@ export default function Optimizer() {
                   <Text fontSize="30px" fontWeight="bold">
                     To
                   </Text>
-                  <Button
-                    colorScheme="blue"
-                    size="md"
-                    borderRadius="full"
-                    fontSize="md"
-                    fontWeight="bold"
-                    _hover={{ bg: 'blue.400' }}
-                    onClick={handleOptimizeModal}
-                  >
-                    Optimize
-                  </Button>
+                  <Flex gap={4}>
+                    <IconButton
+                      aria-label="Notification"
+                      variant="ghost"
+                      icon={
+                        <Image src={NotificationIcon.src} alt="Notification" />
+                      }
+                      onClick={() => setNotificationModal(true)}
+                    />
+                    <Button
+                      colorScheme="blue"
+                      size="md"
+                      borderRadius="full"
+                      fontSize="md"
+                      fontWeight="bold"
+                      _hover={{ bg: 'blue.400' }}
+                      onClick={handleOptimizeModal}
+                    >
+                      Optimize
+                    </Button>
+                  </Flex>
                 </Flex>
                 {Object.keys(selectedInputTokens).length === 0 ? (
                   <NothingToShowOptimizer
@@ -587,6 +613,28 @@ export default function Optimizer() {
         )}
       </Flex>
       <ConfirmModal {...confirmModal} />
+      {notificationModal && (
+        <WidgetUIProviderWrapper>
+          <SubscriptionManager
+            channelAddress={'0xe18Cb7449CB744E8F78fa64e71E584056e9c7376'}
+            onClose={() => setNotificationModal(false)}
+          />
+        </WidgetUIProviderWrapper>
+      )}
     </>
+  );
+}
+
+function WidgetUIProviderWrapper({ children }: { children: React.ReactNode }) {
+  const walletClient = useWalletClient();
+
+  return (
+    <WidgetUIProvider
+      theme={darkWidgetTheme}
+      signer={walletClient.data}
+      env={ENV.STAGING}
+    >
+      {children}
+    </WidgetUIProvider>
   );
 }

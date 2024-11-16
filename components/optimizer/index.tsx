@@ -71,7 +71,7 @@ const processDebankData = (
 
   const currentChainId = CHAIN_INFO_ID[chain.id] ?? +chain.id;
   const chainData = debankData[currentChainId];
-  if (chainData.assets) {
+  if (chainData && chainData.assets) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     chainData.assets.forEach((asset: any) => {
       if (asset.protocol?.id) {
@@ -595,11 +595,7 @@ function WidgetUIProviderWrapper({ children }: { children: React.ReactNode }) {
   const walletClient = useWalletClient();
 
   return (
-    <WidgetUIProvider
-      theme={darkWidgetTheme}
-      signer={walletClient.data}
-      env={ENV.STAGING}
-    >
+    <WidgetUIProvider theme={darkWidgetTheme} signer={walletClient.data}>
       {children}
     </WidgetUIProvider>
   );

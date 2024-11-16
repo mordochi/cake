@@ -32,7 +32,7 @@ const OptimizerPageBanner = () => {
                 fontFamily="heading"
                 textAlign="left"
               >
-                Optimizer
+                Cake
               </Box>
               <Box
                 width="560px"
@@ -43,7 +43,7 @@ const OptimizerPageBanner = () => {
                 fontFamily="body"
                 textAlign="left"
               >
-                Maximize Your DeFi Rewards
+                A Piece of Cake for Sweet DeFi Gains
               </Box>
               <Box
                 width="560px"

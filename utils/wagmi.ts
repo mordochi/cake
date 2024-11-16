@@ -35,7 +35,7 @@ const connectors = connectorsForWallets(
   ],
   {
     projectId: '5cccbcf841ef793ac62a7d2ee52665f3',
-    appName: 'Cake Stake',
+    appName: 'Cake',
   }
 );
 

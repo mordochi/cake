@@ -27,7 +27,7 @@ export function Providers({
               theme={darkTheme()}
               modalSize="compact"
               appInfo={{
-                appName: 'Cake Stake',
+                appName: 'Cake',
               }}
             >
               <ChakraProvider theme={theme} toastOptions={toastOptions}>

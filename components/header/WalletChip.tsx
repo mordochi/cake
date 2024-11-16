@@ -44,7 +44,7 @@ const List = () => {
     <MenuList>
       <MenuItem h="64px">
         <Image
-          src={ensAvatar?.data || '/images/default-avatar.png'}
+          src={ensAvatar?.data || '/avatar.png'}
           alt="wallet"
           borderRadius="full"
           boxSize="20px"
@@ -110,7 +110,7 @@ export const WalletChip = () => {
       >
         <Center gap="8px">
           <Image
-            src={ensAvatar?.data || '/images/default-avatar.png'}
+            src={ensAvatar?.data || '/avatar.png'}
             alt="wallet"
             borderRadius="full"
             boxSize="16px"

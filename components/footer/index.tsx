@@ -2,7 +2,6 @@
 
 import { Box, Flex, Grid } from '@chakra-ui/react';
 import CopyRight from './components/CopyRight';
-import FeedbackButton from './components/FeedbackButton';
 import SocialMediaButtonGroup from './components/SocialMediaButtonGroup';
 
 const Footer = ({ inDropdown = false }: { inDropdown?: boolean }) => {
@@ -36,7 +35,6 @@ const Footer = ({ inDropdown = false }: { inDropdown?: boolean }) => {
           </Flex>
 
           <Grid gap="9px" gridAutoFlow="column">
-            <FeedbackButton />
             <SocialMediaButtonGroup />
           </Grid>
         </Flex>

@@ -62,23 +62,25 @@ export const ChainButtonList = ({
 }) => {
   return (
     <Center display={{ base: 'none', md: 'flex' }} mt="24px">
-      {Object.entries(chainAssets).map(([chainId, chainUsdValue]) => {
-        const ethereumPercentage = chainUsdValue
-          ? ((chainUsdValue / totalAssets) * 100).toFixed(0)
-          : '0';
-        const bgColor =
-          Number(chainId) === selectedChainId ? '#44454a' : '#22242B';
-        return (
-          <ChainButton
-            key={chainId}
-            chainId={Number(chainId)}
-            chainAsset={Number(chainUsdValue || 0)}
-            percentage={Number(ethereumPercentage)}
-            bgColor={bgColor}
-            onSwitchChain={onSwitchChain}
-          />
-        );
-      })}
+      {Object.entries(chainAssets)
+        .sort((a, b) => b[1] - a[1])
+        .map(([chainId, chainUsdValue]) => {
+          const ethereumPercentage = chainUsdValue
+            ? ((chainUsdValue / totalAssets) * 100).toFixed(0)
+            : '0';
+          const bgColor =
+            Number(chainId) === selectedChainId ? '#44454a' : '#22242B';
+          return (
+            <ChainButton
+              key={chainId}
+              chainId={Number(chainId)}
+              chainAsset={Number(chainUsdValue || 0)}
+              percentage={Number(ethereumPercentage)}
+              bgColor={bgColor}
+              onSwitchChain={onSwitchChain}
+            />
+          );
+        })}
     </Center>
   );
 };

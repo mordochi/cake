@@ -196,50 +196,7 @@ export interface IListAttribute extends IBaseAttribute {
   items: Array<string>;
 }
 
-export interface IContentfulAttribute extends IBaseAttribute {}
-
-export type IAttribute =
-  | IStaticAttribute
-  | IDynamicAttribute
-  | IListAttribute
-  | IContentfulAttribute;
-
-export type BatchCase = BatchCaseInContentful & PartialBatchCase;
-
-export type BatchCaseInContentful = {
-  id: string;
-  name: string;
-  description: string;
-  details?: any; // NOTE: marked as any for temporary solution
-  website: Tag;
-  tags?: Tag[];
-  curatorTwitter?: {
-    name?: string;
-    url: string;
-    avatarUrl?: string;
-  };
-  protocols?: string[];
-  label?: Partial<Record<'hot' | 'deprecated', string>>;
-  benefits?: string[];
-};
-
-export type PartialBatchCase = {
-  id: string;
-  attributes?: IAttribute[];
-
-  networkId: number;
-  atomic: boolean;
-  renderExpiry?: number; // in seconds
-
-  inputs?: Input[];
-  optinalInputMenuNote?: string;
-  render: TxRenderer;
-  previewTx: PreviewTx[];
-  gasSaved?: number;
-  setActions?: (args: ActionsArgs) => ActionsReturn;
-  supportedWalletTypes: WalletType[];
-  getApyValue?: () => Promise<string>;
-};
+export type IAttribute = IStaticAttribute | IDynamicAttribute | IListAttribute;
 
 export enum Protocol {
   EtherFi = 'etherFi',

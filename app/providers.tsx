@@ -1,10 +1,8 @@
 'use client';
 
-import { init } from '@amplitude/analytics-browser';
 import { ChakraProvider } from '@chakra-ui/react';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { WagmiProvider } from 'wagmi';
 import { CaseStatsProvider } from '@/context/caseStatsContext';
 import { ContentfulProvider } from '@/context/contentfulContext';
@@ -20,13 +18,6 @@ export function Providers({
   contentfulData: Parameters<typeof ContentfulProvider>[0]['data'];
   caseStatsData: Parameters<typeof CaseStatsProvider>[0]['data'];
 }) {
-  useEffect(() => {
-    // init(process?.env?.NEXT_PUBLIC_AMPLITUDE_API_KEY || '', {
-    //   defaultTracking: true,
-    //   identityStorage: 'localStorage',
-    // });
-  }, []);
-
   return (
     <ContentfulProvider data={contentfulData}>
       <CaseStatsProvider data={caseStatsData}>

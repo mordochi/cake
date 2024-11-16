@@ -9,11 +9,10 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import {
-  darkWidgetTheme,
   ENV,
-  MODAL_POSITION_TYPE,
   SubscriptionManager,
   WidgetUIProvider,
+  darkWidgetTheme,
 } from '@pushprotocol/uiweb';
 import { useCallback, useEffect, useState } from 'react';
 import { Address } from 'viem';

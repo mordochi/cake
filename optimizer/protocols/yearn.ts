@@ -1,10 +1,10 @@
 import { Address, encodeFunctionData, getAddress } from 'viem';
-import { StakeChainType } from '@/models/cases/v3/types';
-import { Category, DefiProtocol, Token, TxInfo, VaultMetadata } from '../types';
 import { arbitrum, mainnet, polygon } from 'viem/chains';
-import { getAPR, YEARN_V3, YearnVault } from './yearnUtils';
-import YearnV3Abi from './abi/YearnV3.json';
+import { StakeChainType } from '@/models/cases/v3/types';
 import TOKEN_IMAGES from '../tokenImages';
+import { Category, DefiProtocol, Token, TxInfo, VaultMetadata } from '../types';
+import YearnV3Abi from './abi/YearnV3.json';
+import { YEARN_V3, YearnVault, getAPR } from './yearnUtils';
 
 export default class YearnV3 implements DefiProtocol {
   id = YEARN_V3.id;
@@ -33,7 +33,7 @@ export default class YearnV3 implements DefiProtocol {
     });
     const vaults = (await response.json()) as YearnVault[];
 
-    let cachedVaults = vaults.filter((vault) => {
+    const cachedVaults = vaults.filter((vault) => {
       const apr = getAPR(vault);
       return (
         vault.version.split('.')[0] === '3' &&

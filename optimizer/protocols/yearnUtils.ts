@@ -1,5 +1,5 @@
-import { Address } from 'viem'
-import { Category } from '../types'
+import { Address } from 'viem';
+import { Category } from '../types';
 
 export const YEARN_V3 = {
   id: 'yearn2',
@@ -7,7 +7,7 @@ export const YEARN_V3 = {
   siteUrl: 'https://yearn.fi/v3',
   category: Category.YIELD,
   isWithdrawalSupported: true,
-}
+};
 
 export type YearnVault = {
   address: Address;
@@ -112,4 +112,4 @@ export const getAPR = (vault: YearnVault) => {
 
 export const floor = (value: number | null, decimals: number): number => {
   return Math.floor((value ?? 0) * 10 ** decimals) / 10 ** decimals;
-}
+};

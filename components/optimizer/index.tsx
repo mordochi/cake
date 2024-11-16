@@ -1,5 +1,4 @@
 'use client';
-import * as amplitude from '@amplitude/analytics-browser';
 import {
   Button,
   Flex,
@@ -159,11 +158,6 @@ export default function Optimizer() {
 
   useEffect(() => {
     if (address) {
-      if (connector) {
-        const identify = new amplitude.Identify();
-        identify.setOnce('wallet', connector.id.toLowerCase());
-        amplitude.identify(identify);
-      }
     } else {
       setChainAssets({});
       setFromData(undefined);
@@ -390,23 +384,6 @@ export default function Optimizer() {
       fromTracking.from_apy.push(fromData.apy * 100.0);
     });
 
-    const toVault = Object.values(selectedToVault)[0];
-    const toInputTokenAmount =
-      Object.values(selectedInputTokens)[0]?.amount || 0;
-    const toApy = toVault.apy * 100.0;
-    const toTracking = {
-      to_protocol: toVault.protocol.id.toLowerCase(),
-      to_apy: toApy,
-      to_input_token: toVault.inputToken.symbol.toLowerCase(),
-      to_output_token: toVault.outputToken.symbol.toLowerCase(),
-      to_input_token_amount: toInputTokenAmount,
-    };
-
-    amplitude.track('optimizer_click_optimize', {
-      ...fromTracking,
-      ...toTracking,
-    });
-
     try {
       const protocolManager = ProtocolManager.getInstance();
       const allTxs: (TxInfo | PermitTx)[] = [];
@@ -498,17 +475,7 @@ export default function Optimizer() {
           }
           setConfirmModal(DEFAULT_CONFIRM_MODAL_STATE);
         },
-        onCompleteTransaction: (totalSteps: number) => {
-          amplitude.track('optimizer_complete_optimize', {
-            to_protocol_name: toVault.protocol.id.toLowerCase(),
-            chain: chainTrackingName,
-            from_assets: fromTracking.from_assets,
-            from_apy: fromTracking.from_apy,
-            to_apy: toApy,
-            total_steps: totalSteps,
-            to_input_token_amount: toInputTokenAmount,
-          });
-        },
+        onCompleteTransaction: () => {},
       });
     } catch (error) {
       console.error('Error during optimization:', error);

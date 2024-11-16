@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import {
   Box,
   Button,
@@ -270,11 +269,6 @@ export function ToTable({
               }}
               onClick={() => {
                 console.log('clicked');
-                track('optimizer_click_vault_link', {
-                  source: 'to',
-                  name: getVaultDisplay(vault),
-                  link: vault.siteUrl,
-                });
               }}
             >
               <ExternalLinkIcon width="16px" height="16px" color="white" />

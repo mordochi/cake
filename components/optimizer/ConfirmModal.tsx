@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import {
   Box,
   Button,
@@ -21,9 +20,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
-import { parseSignature } from 'viem';
 import { useSendTransaction, useSignTypedData } from 'wagmi';
-import { waitForTransactionReceipt } from 'wagmi/actions';
 import TableLoadingGIF from '@/public/gitfs/table-loading.gif';
 import { PermitTx, TxInfo } from '../../optimizer/types';
 import { config } from '../../utils/wagmi';
@@ -101,7 +98,7 @@ export default function ConfirmModal({
   onCompleteTransaction,
   closeOnOverlayClick = true,
 }: IConfirmModalProps) {
-  const { sendTransactionAsync } = useSendTransaction({
+  const {} = useSendTransaction({
     config,
   });
 
@@ -120,70 +117,28 @@ export default function ConfirmModal({
     count: steps.length,
   });
 
-  const handlePermitSignAndTx = useCallback(
-    async (step: PermitSignStep) => {
-      let sendingTransaction = false;
-      try {
-        const data = await signTypedDataAsync(
-          JSON.parse(step.permitTx.typedData)
-        );
-        const nextStepIndex = activeStep + 1;
-        const nextStep = steps[nextStepIndex];
-        if (nextStep.type !== StepType.PERMIT_TX)
-          throw Error(`Permit sign should be followed by permit tx`);
-        const { r, s, v, yParity } = parseSignature(data);
-        setActiveStep(activeStep + 1);
-        sendingTransaction = true;
-        const txHash = await sendTransactionAsync(
-          nextStep.getTx(v ?? BigInt(yParity), r, s)
-        );
-        const transactionReceipt = await waitForTransactionReceipt(config, {
-          hash: txHash,
+  const handlePermitSignAndTx = useCallback(async () => {
+    try {
+      const nextStepIndex = activeStep + 1;
+      const nextStep = steps[nextStepIndex];
+      if (nextStep.type !== StepType.PERMIT_TX)
+        throw Error(`Permit sign should be followed by permit tx`);
+      setActiveStep(activeStep + 1);
+      setActiveStep(nextStepIndex + 1);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.message.includes('User rejected the request.')) {
+        toast({
+          ...TOAST_CONFIG.USER_CANCEL,
         });
-        track('optimizer_sent_transaction', {
-          step_index: activeStep + 1,
-          step_desc: nextStep.getDescription(),
-          step_descs: steps.map((step) => step.getDescription()),
-          total_steps: steps.length,
-          tx_hash: transactionReceipt.transactionHash,
+      } else {
+        toast({
+          ...TOAST_CONFIG.ERROR,
+          title: error.message,
         });
-        setActiveStep(nextStepIndex + 1);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        if (error.message.includes('User rejected the request.')) {
-          toast({
-            ...TOAST_CONFIG.USER_CANCEL,
-          });
-          track('optimizer_cancel_request', {
-            type: sendingTransaction ? 'transaction' : 'signature',
-            step_index: sendingTransaction ? activeStep + 1 : activeStep,
-            step_desc:
-              steps[
-                sendingTransaction ? activeStep + 1 : activeStep
-              ].getDescription(),
-            step_descs: steps.map((step) => step.getDescription()),
-            total_steps: steps.length,
-          });
-        } else {
-          toast({
-            ...TOAST_CONFIG.ERROR,
-            title: error.message,
-          });
-          track('optimizer_send_error', {
-            error_message: error.message,
-            step_index: activeStep,
-            step_desc:
-              steps[
-                sendingTransaction ? activeStep + 1 : activeStep
-              ].getDescription(),
-            step_descs: steps.map((step) => step.getDescription()),
-            total_steps: steps.length,
-          });
-        }
       }
-    },
-    [steps, activeStep, setActiveStep, signTypedDataAsync]
-  );
+    }
+  }, [steps, activeStep, setActiveStep, signTypedDataAsync]);
 
   useEffect(() => {
     const handleStep = async () => {
@@ -194,23 +149,12 @@ export default function ConfirmModal({
         const currentStep = steps[activeStep];
         switch (currentStep.type) {
           case StepType.PERMIT_SIGN:
-            await handlePermitSignAndTx(currentStep);
+            await handlePermitSignAndTx();
             break;
           case StepType.PERMIT_TX:
             // Do nothing, cause permit tx dependens on permit sign so we handle it right after permit sign
             break;
           case StepType.TX:
-            const txHash = await sendTransactionAsync(currentStep.getTx());
-            const transactionReceipt = await waitForTransactionReceipt(config, {
-              hash: txHash,
-            });
-            track('optimizer_sent_transaction', {
-              step_index: activeStep,
-              step_desc: currentStep.getDescription(),
-              step_descs: steps.map((step) => step.getDescription()),
-              total_steps: steps.length,
-              tx_hash: transactionReceipt.transactionHash,
-            });
             setActiveStep(activeStep + 1);
             break;
         }
@@ -220,24 +164,10 @@ export default function ConfirmModal({
           toast({
             ...TOAST_CONFIG.USER_CANCEL,
           });
-          track('optimizer_cancel_request', {
-            type: 'transaction',
-            step_index: activeStep,
-            step_desc: steps[activeStep].getDescription(),
-            step_descs: steps.map((step) => step.getDescription()),
-            total_steps: steps.length,
-          });
         } else {
           toast({
             ...TOAST_CONFIG.ERROR,
             title: error.message,
-          });
-          track('optimizer_send_error', {
-            error_message: error.message,
-            step_index: activeStep,
-            step_desc: steps[activeStep].getDescription(),
-            step_descs: steps.map((step) => step.getDescription()),
-            total_steps: steps.length,
           });
         }
       }

@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import { Link } from '@chakra-ui/next-js';
 import {
   Accordion,
@@ -46,7 +45,6 @@ const DropDownMenuItem = ({
   isCurrent: boolean;
 }) => {
   const handleOnClick = useCallback(() => {
-    track(page.eventName);
     setIsOpen(false);
   }, [page.eventName, setIsOpen]);
 
@@ -81,7 +79,6 @@ export const DesktopDropdown = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const handleMouseEnter = useCallback(() => {
-    track(clickEventName);
     setIsOpen(true);
   }, [clickEventName]);
 
@@ -154,7 +151,6 @@ const DropDownLink = ({
   isCurrent: boolean;
 }) => {
   const handleOnClick = useCallback(() => {
-    track(page.eventName);
     onClose();
   }, [page.eventName, onClose]);
 
@@ -175,7 +171,6 @@ export const MobileDropDown = ({
   onClose,
   children,
   pages,
-  clickEventName,
 }: {
   onClose: () => void;
   children: React.ReactNode;
@@ -187,9 +182,7 @@ export const MobileDropDown = ({
     () => checkIsInPages(pathname, pages),
     [pathname, pages]
   );
-  const handleOnClick = useCallback(() => {
-    track(clickEventName);
-  }, [clickEventName]);
+  const handleOnClick = useCallback(() => {}, []);
 
   return (
     <Accordion allowToggle>

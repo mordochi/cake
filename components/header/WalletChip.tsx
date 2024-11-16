@@ -1,4 +1,3 @@
-import * as amplitude from '@amplitude/analytics-browser';
 import {
   Box,
   Button,
@@ -22,7 +21,7 @@ import CopyIcon from '@icons/copy.svg';
 import DisconnectIcon from '@icons/disconnect.svg';
 
 const List = () => {
-  const { address, chain, connector } = useAccount();
+  const { address, chain } = useAccount();
   const { disconnect } = useDisconnect();
   const ensName = useEnsName({ address });
   const ensAvatar = useEnsAvatar({
@@ -40,17 +39,6 @@ const List = () => {
       });
     }
   }, [hasCopied, toast]);
-
-  useEffect(() => {
-    if (address) {
-      amplitude.setUserId(address);
-      if (connector) {
-        const identify = new amplitude.Identify();
-        identify.setOnce('wallet', connector.id.toLowerCase());
-        amplitude.identify(identify);
-      }
-    }
-  }, [address, connector]);
 
   return (
     <MenuList>
@@ -118,9 +106,7 @@ export const WalletChip = () => {
           base: '52px',
           md: 'auto',
         }}
-        onClick={() => {
-          amplitude.track('navbar_click_account');
-        }}
+        onClick={() => {}}
       >
         <Center gap="8px">
           <Image
@@ -150,7 +136,6 @@ export const WalletChip = () => {
         md: 'm',
       }}
       onClick={() => {
-        amplitude.track('navbar_click_connect_wallet');
         connect();
       }}
     >

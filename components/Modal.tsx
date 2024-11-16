@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import { Link } from '@chakra-ui/next-js';
 import {
   Box,
@@ -14,7 +13,7 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import { ReactElement, ReactNode, isValidElement, useEffect } from 'react';
+import { ReactElement, ReactNode, isValidElement } from 'react';
 import PendingIcon from '@icons/pending.svg';
 import SuccessfulIcon from '@icons/token-check.svg';
 import ErrorIcon from '@icons/token-cross.svg';
@@ -61,16 +60,10 @@ export default function Modal({
   buttonText,
   onButtonClick,
   redirectInfo,
-  displayEvent,
   customBody,
   isButtonDisabled,
   closeOnOverlayClick = true,
 }: IModalProps) {
-  useEffect(() => {
-    if (isOpen && displayEvent) {
-      track(displayEvent.eventName, displayEvent.eventProperties);
-    }
-  }, [isOpen, displayEvent]);
   const handleButtonClick = onButtonClick
     ? () => onButtonClick(onClose)
     : onClose;

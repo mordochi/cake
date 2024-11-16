@@ -1,4 +1,3 @@
-import * as amplitude from '@amplitude/analytics-browser';
 import { Button, Center, Flex, Text } from '@chakra-ui/react';
 import CryptoIcon from '../CryptoIcon';
 import { chainId2name } from './types';
@@ -28,10 +27,6 @@ const ChainButton = ({
       _hover={{ bg: '#3C3D43' }}
       onClick={async () => {
         await onSwitchChain(chainId);
-        amplitude.track('optimizer_click_chain_tab', {
-          chain: chainId2name(chainId).toLowerCase(),
-          total_usd_value: chainAsset,
-        });
       }}
     >
       <Flex align="center" mr={2}>

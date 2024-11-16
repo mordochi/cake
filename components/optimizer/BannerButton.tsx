@@ -1,6 +1,5 @@
 'use client';
 
-import * as amplitude from '@amplitude/analytics-browser';
 import { Button } from '@chakra-ui/react';
 import useTrackModalConnect from '@/hooks/useTrackableConnectModal';
 import useConnector from '../../hooks/useConnector';
@@ -18,7 +17,6 @@ const BannerButton = () => {
             md: 'm',
           }}
           onClick={() => {
-            amplitude.track('optimizer_banner_click_connect_wallet');
             connect();
           }}
         >

@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import {
   Box,
   Button,
@@ -15,7 +14,7 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 type FeedbackItem = {
   key: string;
@@ -62,7 +61,6 @@ export default function FeedbackModal({
   isOpen,
   type,
   onClose,
-  displayEvent,
 }: IFeedbackModalProps) {
   const [value, setValue] = useState('');
   const [checkedItems, setCheckedItems] = useState<FeedbackItem[]>([]);
@@ -73,11 +71,6 @@ export default function FeedbackModal({
     const inputValue = e.target.value;
     setValue(inputValue);
   };
-  useEffect(() => {
-    if (isOpen && displayEvent) {
-      track(displayEvent.eventName, displayEvent.eventProperties);
-    }
-  }, [isOpen, displayEvent]);
 
   const innerOnClose = () => {
     setValue('');
@@ -87,11 +80,6 @@ export default function FeedbackModal({
 
   const handleButtonClick = () => {
     innerOnClose();
-    track('optimizer_send_feedback', {
-      type: type === FeedbackType.GOOD ? 'success' : 'failed',
-      reasons: checkedItems.map((item) => item.value.toLowerCase()),
-      feedback: value,
-    });
   };
 
   const list =

@@ -1,6 +1,5 @@
 'use client';
 
-import { track } from '@amplitude/analytics-browser';
 import { Link } from '@chakra-ui/next-js';
 import {
   Box,
@@ -12,8 +11,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { Fade as Hamburger } from 'hamburger-react';
-import { useCallback } from 'react';
-import { useAccountEffect } from 'wagmi';
 import Footer from '@/components/footer';
 import { WalletChip } from '@/components/header/WalletChip';
 
@@ -43,9 +40,6 @@ const PageLink = ({
     fontWeight={700}
     lineHeight={{ base: '28px', md: '24px' }}
     onClick={() => {
-      track('navbar_click_tab', {
-        tab: title,
-      });
       onClick?.();
     }}
   >
@@ -53,35 +47,11 @@ const PageLink = ({
   </Link>
 );
 
-const Tracking = () => {
-  const onConnect = useCallback(
-    ({
-      connector,
-    }: Parameters<
-      NonNullable<
-        NonNullable<Parameters<typeof useAccountEffect>[0]>['onConnect']
-      >
-    >[0]) => {
-      track('connect_wallet_success', {
-        wallet: connector.id.toLowerCase(),
-      });
-    },
-    []
-  );
-
-  useAccountEffect({
-    onConnect,
-  });
-
-  return null;
-};
-
 export default function Header({}) {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
     <>
-      <Tracking />
       <Box
         zIndex={isOpen ? 'modal' : 'banner'}
         position="fixed"

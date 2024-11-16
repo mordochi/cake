@@ -13,7 +13,6 @@ import {
   parseAbiParameters,
 } from 'viem';
 import { apiCaller } from '@/utils/apiCaller';
-import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import PublicClient from '@services/publicClient';
 import {

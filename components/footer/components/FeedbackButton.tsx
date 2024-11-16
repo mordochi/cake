@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import { Button, Image } from '@chakra-ui/react';
 import iconFeedback from '@icons/feedback.png';
 
@@ -9,9 +8,7 @@ const FeedbackButton = () => {
       variant="secondary"
       width="fit-content"
       h="24px"
-      onClick={() => {
-        track('footer_click_feedback');
-      }}
+      onClick={() => {}}
     >
       <Image
         alt="Leave us a feedback"

@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import { Link } from '@chakra-ui/next-js';
 import { Grid } from '@chakra-ui/react';
 
@@ -15,9 +14,7 @@ const SocialMediaButtonGroup = () => {
           isExternal
           w="22px"
           h="22px"
-          onClick={() => {
-            track('footer_click_social', { link: href });
-          }}
+          onClick={() => {}}
         >
           {icon}
         </Link>

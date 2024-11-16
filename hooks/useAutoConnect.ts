@@ -1,4 +1,3 @@
-import { track } from '@amplitude/analytics-browser';
 import { useEffect } from 'react';
 import { useAccount, useConnect } from 'wagmi';
 
@@ -6,11 +5,7 @@ export default function useAutoConnect() {
   const { address } = useAccount();
   const { connectors, connect } = useConnect({
     mutation: {
-      onSuccess({}) {
-        track('connect_wallet_success', {
-          wallet: 'blocto',
-        });
-      },
+      onSuccess({}) {},
     },
   });
 

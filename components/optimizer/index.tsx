@@ -413,9 +413,6 @@ export default function Optimizer() {
           fromData.token.amount.toString(),
           fromData.token.decimals
         );
-        const amountBigInt = BigInt(
-          Number(fromAmount) * 10 ** fromData.token.decimals || 0
-        );
         const withdrawal = await protocolManager.withdraw(
           fromData.protocolId,
           chain as StakeChainType,
@@ -432,7 +429,7 @@ export default function Optimizer() {
             symbol: fromData.token.symbol,
             name: '',
           },
-          amountBigInt
+          fromAmount
         );
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         Array.isArray(withdrawal.txs)
@@ -450,7 +447,9 @@ export default function Optimizer() {
       // Handle deposits to selected vaults
       for (const [vaultAddress, vaultData] of Object.entries(selectedToVault)) {
         const amountBigInt = selectedInputTokens0.amount;
-        const amountNumber = Number(formatUnits(amountBigInt, vaultData.inputToken.decimals))
+        const amountNumber = Number(
+          formatUnits(amountBigInt, vaultData.inputToken.decimals)
+        );
 
         const deposits = await protocolManager.deposit(
           vaultData.protocol.id,

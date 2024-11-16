@@ -37,6 +37,10 @@ const TOKEN_IMAGES: Partial<Record<Address, string>> = {
     'https://assets.coingecko.com/coins/images/30118/large/0xf939e0a03fb07f59a73314e73794be0e57ac1b4e.png?1721097561',
   '0x35fa164735182de50811e8e2e824cfb9b6118ac2':
     'https://assets.coingecko.com/coins/images/33049/large/ether.fi_eETH.png?1700473063',
+  '0x3c499c542cef5e3811e1192ce70d8cc03d5c3359':
+    'https://assets.coingecko.com/coins/images/6319/standard/usdc.png?1696506694',
+  '0xc2132d05d31c914a87c6611c10748aeb04b58e8f':
+    'https://assets.coingecko.com/coins/images/325/standard/Tether.png?1696501661',
 };
 
 export default TOKEN_IMAGES;

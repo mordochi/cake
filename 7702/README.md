@@ -51,13 +51,10 @@ $ anvil
 $ source .env
 
 $ forge script script/Cake.s.sol:CakeScript \
---chain-id 1 \
---rpc-url $RPC_URL \
+--chain-id 31337 \
+--rpc-url http://127.0.0.1:8545 \
 --private-key $PRIVATE_KEY \
 --broadcast  \
---verify \
---verifier blockscout \
---verifier-url $BLOCKSCOUT_URL \
 -vvvv \
 --resume
 ```

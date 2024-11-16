@@ -1,5 +1,6 @@
 import { Address } from 'viem';
-import { arbitrum, mainnet, optimism, polygon } from 'viem/chains';
+import { arbitrum, optimism, polygon } from 'viem/chains';
+import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 
 enum UniversalComposerSupportedToken {
   ETH = 'ETH',

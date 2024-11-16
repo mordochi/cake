@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Address, encodeFunctionData, formatUnits, isAddressEqual } from 'viem';
 import { aprToApy } from '@/cases/utils';
 import { StakeChainType } from '@/models/cases/v3/types';

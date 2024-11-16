@@ -20,6 +20,7 @@ import {
   VaultMetadata,
 } from '@/optimizer/types';
 import { Reward } from '@/optimizer/types';
+import { CHAIN_INFO_ID } from '@/utils/generateHttpEndpoint';
 import { ChainButtonList } from './ChainButtonList';
 import ConfirmModal, {
   DEFAULT_CONFIRM_MODAL_STATE,
@@ -54,12 +55,14 @@ const processDebankData = (
 
   Object.entries(debankData).forEach(([chainId, data]) => {
     const usdValue = Number(data.usd_value);
-    if (usdValue > 0 && OptimizerSupportedChains[Number(chainId)]) {
-      chainUsdValues[Number(chainId)] = usdValue;
+    const currentChainId = +chainId === 1 ? 31337 : +chainId;
+    if (usdValue > 0 && OptimizerSupportedChains[currentChainId]) {
+      chainUsdValues[currentChainId] = usdValue;
     }
   });
 
-  const chainData = debankData[chain.id.toString()];
+  const currentChainId = CHAIN_INFO_ID[chain.id] ?? +chain.id;
+  const chainData = debankData[currentChainId];
   if (chainData.assets) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     chainData.assets.forEach((asset: any) => {
@@ -249,7 +252,6 @@ export default function Optimizer() {
           ...updatedData.fromDataToken,
           ...checkableFromData,
         ].sort((a, b) => b.usdValue - a.usdValue);
-
         setFromData([...fromDataCheckable, ...updatedData.fromDataProtocol]);
       };
 

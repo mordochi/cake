@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Address, formatUnits } from 'viem';
 import { StakeChainType } from '@/cases/types';
 import { apiCaller } from '@/utils/apiCaller';
+import { CHAIN_INFO_ID } from '@/utils/generateHttpEndpoint';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import {
   Action,
@@ -110,7 +112,7 @@ export const fetchMarketInfoByToken = async (
   let offset = 0;
   try {
     while (true) {
-      const url = `${PENDLE_API_BASE_URL}/${chainId}/markets?q=${underlyingTokenAddress}&limit=${limit}&skip=${offset}`;
+      const url = `${PENDLE_API_BASE_URL}/${CHAIN_INFO_ID[chainId] ?? chainId}/markets?q=${underlyingTokenAddress}&limit=${limit}&skip=${offset}`;
       const [res, err] = await tryExecuteRequest(() => apiCaller.get(url));
       if (err) {
         throw new Error(`Failed to fetch market info: ${err.message}`);
@@ -207,6 +209,7 @@ const parseKey = (key: string): [string, Address] | null => {
  * @param data The API response
  * @returns Market information
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const extractMarketInfo = (data: Record<string, any>): Market => {
   const underlyingToken = {
     name: data.underlyingAsset.name,

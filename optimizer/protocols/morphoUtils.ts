@@ -6,6 +6,7 @@ import {
 } from '@/cases/prebuilt-tx/morpho';
 import { StakeChainType } from '@/cases/types';
 import { apiCaller } from '@/utils/apiCaller';
+import { CHAIN_INFO_ID } from '@/utils/generateHttpEndpoint';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import {
   Action,
@@ -104,7 +105,7 @@ export const fetchVaultByTokens = async (
 ): Promise<Vault> => {
   const variables = {
     where: {
-      chainId_in: [chain.id],
+      chainId_in: [CHAIN_INFO_ID[chain.id] ?? chain.id],
       assetAddress_in: inTokenAddress,
       address_in: outTokenAddress,
       whitelisted: true,
@@ -131,6 +132,7 @@ export const fetchVaultByTokens = async (
  */
 const extractVaultsData = (
   chain: StakeChainType,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   vaults: any[]
 ): Promise<Vault[]> =>
   Promise.all(vaults.map((vault) => mapVaultData(chain, vault)));
@@ -143,6 +145,7 @@ const extractVaultsData = (
  */
 const mapVaultData = async (
   chain: StakeChainType,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   vault: Record<string, any>
 ): Promise<Vault> => {
   const outputToken = await getTokenInfo(chain, vault.address);
@@ -170,6 +173,7 @@ const mapVaultData = async (
  * @param tokenData Raw token data
  * @returns Structured Token object
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapTokenData = (tokenData: Record<string, any>): Token => ({
   name: tokenData.name,
   symbol: tokenData.symbol,

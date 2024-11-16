@@ -7,7 +7,6 @@ import {
   base,
   blast,
   bsc,
-  mainnet,
   merlin,
   optimism,
   polygon,
@@ -17,38 +16,31 @@ import {
 } from 'wagmi/chains';
 import { StakeChainType } from '@/cases/types';
 
-export const pectra = defineChain({
-  // id: 7042905162,
-  id: 31337, //local
-  name: 'pectra-devnet-4',
+export const CHAIN_INFO_ID: Record<string, number> = {
+  '31337': 1,
+};
+
+export const anvilMainnet = defineChain({
+  id: 31337,
+  name: 'Ethereum',
   nativeCurrency: {
-    decimals: 18,
     name: 'Ether',
     symbol: 'ETH',
+    decimals: 18,
   },
   rpcUrls: {
-    default: {
-      http: ['http://127.0.0.1:8545'],
-      // http: ['https://rpc.pectra-devnet-4.ethpandaops.io'],
-      // webSocket: ['wss://rpc.pectra-devnet-4.ethpandaops.io'],
-    },
+    default: { http: ['http://127.0.0.1:8545'] },
   },
   blockExplorers: {
     default: {
-      name: 'Explorer',
-      url: 'https://explorer.pectra-devnet-4.ethpandaops.io',
+      name: 'Story Explorer',
+      url: 'https://odyssey.storyscan.xyz',
     },
   },
-  // contracts: {
-  //   multicall3: {
-  //     address: '0xcA11bde05977b3631167028862bE2a173976CA11',
-  //     blockCreated: 5882,
-  //   },
-  // },
 });
 
 const CHAINS_CONFIG = [
-  mainnet,
+  anvilMainnet,
   polygon,
   arbitrum,
   optimism,
@@ -62,7 +54,7 @@ const CHAINS_CONFIG = [
   // For testing token pages on dev/QA environments
   ...(process.env.NEXT_PUBLIC_APP_ENV !== 'production' ? [sepolia] : []),
   // For demo 7702 behavior
-  ...(process.env.NEXT_PUBLIC_7702_DEMO === 'true' ? [pectra] : []),
+  ...(process.env.NEXT_PUBLIC_7702_DEMO === 'true' ? [anvilMainnet] : []),
 ];
 
 const TYPED_CHAINS = CHAINS_CONFIG as unknown as Readonly<
@@ -73,7 +65,7 @@ const TYPED_CHAINS = CHAINS_CONFIG as unknown as Readonly<
 const chainIdRpcMapping: {
   [key in (typeof TYPED_CHAINS)[number]['id']]?: string;
 } = {
-  [mainnet.id]: 'https://mainnet.infura.io/v3/',
+  // [mainnet.id]: 'https://mainnet.infura.io/v3/',
   [sepolia.id]: 'https://sepolia.infura.io/v3/',
   [polygon.id]: 'https://polygon-mainnet.infura.io/v3/',
   [arbitrum.id]: 'https://arbitrum-mainnet.infura.io/v3/',

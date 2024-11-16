@@ -1,5 +1,6 @@
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { metaMaskWallet } from '@rainbow-me/rainbowkit/wallets';
+
 import { createConfig } from 'wagmi';
 import {
   arbitrum,
@@ -7,7 +8,6 @@ import {
   base,
   blast,
   bsc,
-  mainnet,
   merlin,
   optimism,
   polygon,
@@ -16,7 +16,10 @@ import {
   zora,
 } from 'wagmi/chains';
 import { WalletType } from '@/cases/types';
-import generateHttpEndpoint, { CHAINS, pectra } from './generateHttpEndpoint';
+import generateHttpEndpoint, {
+  CHAINS,
+  anvilMainnet as mainnet,
+} from './generateHttpEndpoint';
 
 export const walletTypes: Record<string, WalletType> = {
   metaMask: WalletType.EOA,
@@ -54,6 +57,5 @@ export const config = createConfig({
     [merlin.id]: generateHttpEndpoint(merlin.id),
     [blast.id]: generateHttpEndpoint(blast.id),
     [sepolia.id]: generateHttpEndpoint(sepolia.id),
-    [pectra.id]: generateHttpEndpoint(pectra.id),
   },
 });

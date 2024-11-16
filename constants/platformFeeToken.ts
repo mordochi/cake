@@ -5,12 +5,12 @@ import {
   base,
   blast,
   bsc,
-  mainnet,
   merlin,
   optimism,
   polygon,
   scroll,
 } from 'viem/chains';
+import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 
 export interface IPlatformFeeTokenInfo {
   symbol: string;

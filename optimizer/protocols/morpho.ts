@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Address } from 'viem';
 import { StakeChainType } from '@/models/cases/v3/types';
 import { DefiProtocol, PermitTx, Token, TxInfo, VaultMetadata } from '../types';

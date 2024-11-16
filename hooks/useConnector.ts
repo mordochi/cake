@@ -5,7 +5,6 @@ import {
   avalanche,
   base,
   bsc,
-  mainnet,
   optimism,
   polygon,
   zora,
@@ -13,6 +12,7 @@ import {
 import { WalletType } from '@/cases/types';
 import { formatConnectorId } from '@/utils/formatConnectorId';
 import { CHAINS } from '@/utils/generateHttpEndpoint';
+import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 import { walletTypes } from '@/utils/wagmi';
 
 const coinbaseSupportedChains: number[] = [

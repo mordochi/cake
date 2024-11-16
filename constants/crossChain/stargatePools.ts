@@ -4,12 +4,12 @@ import {
   avalanche,
   base,
   bsc,
-  mainnet,
   optimism,
   polygon,
   scroll,
 } from 'viem/chains';
 import { ChainId } from '@/types';
+import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 
 export type StargatePoolType = {
   chainId: ChainId;

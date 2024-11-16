@@ -8,7 +8,6 @@ import {
   fantom,
   gnosis,
   klaytn,
-  mainnet,
   optimism,
   polygon,
   zkSync,
@@ -17,7 +16,10 @@ import ONEINCH from '@/cases/abi/1inch.json';
 import { PreviewTx, Tx } from '@/models/cases/v3/types';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
-import { CHAINS } from '../../utils/generateHttpEndpoint';
+import {
+  CHAINS,
+  anvilMainnet as mainnet,
+} from '../../utils/generateHttpEndpoint';
 import { getDecimals } from '../utils';
 import type { Abi, Address } from 'abitype';
 

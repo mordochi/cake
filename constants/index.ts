@@ -1,5 +1,6 @@
 import { Address } from 'viem';
-import { mainnet, sepolia } from 'wagmi/chains';
+import { sepolia } from 'wagmi/chains';
+import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 
 export const baseApiUrl = process.env.NEXT_PUBLIC_API_URL || '';
 

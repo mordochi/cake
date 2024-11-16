@@ -1,4 +1,3 @@
-import PublicClient from '@services/publicClient';
 import {
   Address,
   encodeFunctionData,
@@ -9,6 +8,8 @@ import {
 import { mainnet } from 'viem/chains';
 import { StakeChainType } from '@/cases/types';
 import { aprToApy } from '@/cases/utils';
+import { CHAIN_INFO_ID } from '@/utils/generateHttpEndpoint';
+import PublicClient from '@services/publicClient';
 import { MAX_UINT256, NATIVE_TOKEN_ADDRESS, RAY_DECIMALS } from '../consts';
 import {
   Action,
@@ -340,7 +341,9 @@ export default class Aave implements DefiProtocol {
     const client = PublicClient.get(chain);
 
     const dataProvider = getContract({
-      address: this.aaveContractAddrs[chain.id].ProtocolDataProvider,
+      address:
+        this.aaveContractAddrs[CHAIN_INFO_ID[chain.id] ?? chain.id]
+          .ProtocolDataProvider,
       abi: AaveProtocolDataProvider,
       client: client,
     });
@@ -364,7 +367,9 @@ export default class Aave implements DefiProtocol {
     const client = PublicClient.get(chain);
 
     const dataProvider = getContract({
-      address: this.aaveContractAddrs[chain.id].ProtocolDataProvider,
+      address:
+        this.aaveContractAddrs[CHAIN_INFO_ID[chain.id] ?? chain.id]
+          .ProtocolDataProvider,
       abi: AaveProtocolDataProvider,
       client: client,
     });
@@ -381,7 +386,8 @@ export default class Aave implements DefiProtocol {
     const client = PublicClient.get(chain);
 
     const oracle = getContract({
-      address: this.aaveContractAddrs[chain.id].Oracle,
+      address:
+        this.aaveContractAddrs[CHAIN_INFO_ID[chain.id] ?? chain.id].Oracle,
       abi: Oracle,
       client: client,
     });

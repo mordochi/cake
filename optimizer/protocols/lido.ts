@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Address, encodeFunctionData, formatUnits, isAddressEqual } from 'viem';
 import { ReferalAccount } from '@/cases/constants';
 import { StakeChainType } from '@/cases/types';

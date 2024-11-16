@@ -1,4 +1,3 @@
-import PublicClient from '@services/publicClient';
 import {
   Abi,
   Address,
@@ -13,9 +12,10 @@ import {
   keccak256,
   parseAbiParameters,
 } from 'viem';
-import { mainnet } from 'viem/chains';
 import { apiCaller } from '@/utils/apiCaller';
+import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 import { tryExecuteRequest } from '@/utils/tryExecute';
+import PublicClient from '@services/publicClient';
 import {
   Rounding,
   mulDivWithRounding,
@@ -103,6 +103,7 @@ export const getVaultAddress = (
   const decodedFnData = decodeFunctionData({
     abi: EthereumBundlerV2,
     data: multicallData,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any;
 
   let vaultAddress = undefined;
@@ -115,7 +116,9 @@ export const getVaultAddress = (
     const abiItem = getAbiItem({
       abi: EthereumBundlerV2,
       name: decodedFnData.functionName,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }) as any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (abiItem.inputs as any[]).forEach((element, index) => {
       if (element.name === 'vault') {
         vaultAddress = decodedFnData.args?.[index] as Address;
@@ -829,7 +832,7 @@ export const getAPY = async (vaultAddress: Address) => {
     operationName: 'getVaultApyTimeseries',
     variables: {
       address: vaultAddress,
-      chainId: mainnet.id,
+      chainId: 1,
       options: {
         startTimestamp: oneHourAgoTimestamp,
         endTimestamp: currentTimestamp,

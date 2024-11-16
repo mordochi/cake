@@ -1,4 +1,4 @@
-import PublicClient from '@services/publicClient';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Address,
   encodeFunctionData,
@@ -10,6 +10,7 @@ import { StakeChainType } from '@/cases/types';
 import { aprToApy } from '@/cases/utils';
 import { apiCaller } from '@/utils/apiCaller';
 import { tryExecuteRequest } from '@/utils/tryExecute';
+import PublicClient from '@services/publicClient';
 import { NATIVE_TOKEN_ADDRESS } from '../consts';
 import {
   Action,

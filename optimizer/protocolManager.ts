@@ -53,9 +53,16 @@ class ProtocolManager {
     const promises = protocolPairs.map((pair) => {
       const protocol = this.protocols[pair.protocolId];
       if (!protocol) return Promise.resolve([]);
-      return protocol
-        .getPositionInfo(chain, pair.inputTokenAddress, pair.outputTokenAddress)
-        .catch((_) => []);
+      return (
+        protocol
+          .getPositionInfo(
+            chain,
+            pair.inputTokenAddress,
+            pair.outputTokenAddress
+          )
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          .catch((_) => [])
+      );
     });
 
     const results = await Promise.all(promises);

@@ -1,16 +1,8 @@
 import { Address, Chain } from 'viem';
-import {
-  arbitrum,
-  avalanche,
-  base,
-  bsc,
-  mainnet,
-  optimism,
-  polygon,
-} from 'viem/chains';
+import { arbitrum, avalanche, base, bsc, optimism, polygon } from 'viem/chains';
 import { NATIVE_TOKEN_ADDRESS } from '@/optimizer/consts';
+import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 import { PermitTx, Tx } from '../../optimizer/types';
-
 export interface DebankPortfolio {
   [chainId: string]: DebankChainData;
 }

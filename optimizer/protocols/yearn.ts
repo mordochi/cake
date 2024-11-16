@@ -4,6 +4,7 @@ import { StakeChainType } from '@/models/cases/v3/types';
 import TOKEN_IMAGES from '../tokenImages';
 import { Category, DefiProtocol, Token, TxInfo, VaultMetadata } from '../types';
 import YearnV3Abi from './abi/YearnV3.json';
+import GaugeV2Abi from './abi/GaugeV2.json';
 import { YEARN_V3, YearnVault, getAPR } from './yearnUtils';
 
 export default class YearnV3 implements DefiProtocol {
@@ -96,26 +97,41 @@ export default class YearnV3 implements DefiProtocol {
     const vaults = await this.getVaults([inputToken.address]);
     const vault = vaults.find(
       (vault) =>
-        vault.chainID === chain.id &&
-        (getAddress(vault.address) === getAddress(outputToken.address) ||
-          getAddress(vault.staking.address) === getAddress(outputToken.address))
+        getAddress(vault.address) === getAddress(outputToken.address) ||
+        getAddress(vault.staking.address) === getAddress(outputToken.address)
     );
     if (!vault) throw new Error('Vault not found');
+    let txs: TxInfo[] = [];
+
+    if (getAddress(vault.staking.address) === getAddress(outputToken.address)) {
+      txs.push({
+        description: `Unstake ${amount} ${outputToken.symbol} from ${vault.name} on Yearn V3`,
+        displayAmount: amount.toString(),
+        to: vault.staking.address,
+        value: BigInt(0),
+        data: encodeFunctionData({
+          abi: GaugeV2Abi,
+          functionName: 'withdraw',
+          args: [amount, userAddress, userAddress, true],
+        }),
+      });
+    }
+
     const maxLoss = 1n;
     const data = encodeFunctionData({
       abi: YearnV3Abi,
       functionName: 'redeem',
       args: [amount, userAddress, userAddress, maxLoss],
     });
-    return [
-      {
-        description: `Withdraw ${amount} ${inputToken.symbol} from ${vault.name} on Yearn V3`,
-        displayAmount: amount.toString(),
-        to: vault.address,
-        value: BigInt(0),
-        data,
-      },
-    ];
+    txs.push({
+      description: `Withdraw ${amount} ${inputToken.symbol} from ${vault.name} on Yearn V3`,
+      displayAmount: amount.toString(),
+      to: vault.address,
+      value: BigInt(0),
+      data,
+    });
+
+    return txs;
   };
 
   deposit = async (

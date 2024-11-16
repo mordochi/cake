@@ -13,7 +13,7 @@ import {
   darkWidgetTheme,
 } from '@pushprotocol/uiweb';
 import { useCallback, useEffect, useState } from 'react';
-import { Address } from 'viem';
+import { Address, formatUnits, parseUnits } from 'viem';
 import { useAccount, useConfig, useWalletClient } from 'wagmi';
 import { switchChain } from 'wagmi/actions';
 import { StakeChainType } from '@/cases/types';
@@ -92,8 +92,15 @@ const processDebankData = (
           });
         }
         positionPairs.push(pair);
-        const amount = Number(asset.asset.amount);
-        const usdValue = amount * Number(asset.asset.price);
+        const amount = parseUnits(asset.asset.amount, asset.asset.decimals);
+
+        const usdValue = Number(
+          formatUnits(
+            BigInt(Math.floor(Number(amount) * asset.asset.price)),
+            asset.asset.decimals
+          )
+        );
+        console.log(`usdValue: `, usdValue);
         fromDataProtocol.push({
           chk: false,
           protocolId: asset.protocol.id,
@@ -108,8 +115,14 @@ const processDebankData = (
         });
       } else {
         // pure asset
-        const amount = Number(asset.asset.amount);
-        const usdValue = amount * Number(asset.asset.price);
+        const amount = parseUnits(asset.asset.amount, asset.asset.decimals);
+        const usdValue = Number(
+          formatUnits(
+            BigInt(Math.floor(Number(amount) * asset.asset.price)),
+            asset.asset.decimals
+          )
+        );
+        console.log(`else usdValue: `, usdValue);
         fromDataToken.push({
           chk: true,
           protocolId: '',
@@ -396,18 +409,22 @@ export default function Optimizer() {
         selectedInputTokens
       )) {
         if (fromData.protocolId === '') continue;
+        const fromAmount = parseUnits(
+          fromData.token.amount.toString(),
+          fromData.token.decimals
+        );
         const amountBigInt = BigInt(
-          fromData.amount * 10 ** fromData.token.decimals || 0
+          Number(fromAmount) * 10 ** fromData.token.decimals || 0
         );
         const withdrawal = await protocolManager.withdraw(
           fromData.protocolId,
           chain as StakeChainType,
           address as Address,
           {
-            address: tokenAddress as Address,
-            decimals: fromData.token.decimals,
-            symbol: fromData.token.symbol,
-            name: '',
+            address: fromData.supplyToken[0].token_address as Address,
+            decimals: fromData.supplyToken[0].decimals,
+            symbol: fromData.supplyToken[0].symbol,
+            name: fromData.supplyToken[0].name,
           },
           {
             address: fromData.token.token_address as Address,
@@ -427,13 +444,13 @@ export default function Optimizer() {
         selectedInputTokens
       )[0] as FromData;
       if (selectedInputTokens0.token.token_address === 'eth') {
-        selectedInputTokens0.amount = selectedInputTokens0.amount * 0.9;
+        selectedInputTokens0.amount =
+          (selectedInputTokens0.amount * BigInt(9)) / BigInt(10);
       }
       // Handle deposits to selected vaults
       for (const [vaultAddress, vaultData] of Object.entries(selectedToVault)) {
-        const amountBigInt = BigInt(
-          selectedInputTokens0.amount * 10 ** vaultData.inputToken.decimals || 0
-        );
+        const amountBigInt = selectedInputTokens0.amount;
+        const amountNumber = Number(formatUnits(amountBigInt, vaultData.inputToken.decimals))
 
         const deposits = await protocolManager.deposit(
           vaultData.protocol.id,
@@ -459,9 +476,9 @@ export default function Optimizer() {
           return {
             ...tx,
             description: isApprove
-              ? `Approve ${formatAmount(selectedInputTokens0.amount)} ${vaultData.inputToken.symbol} to ${vaultData.protocol.name}`
-              : `Deposit ${formatAmount(selectedInputTokens0.amount)} ${vaultData.inputToken.symbol} to ${vaultDisplay} vault`,
-            displayAmount: formatAmount(selectedInputTokens0.amount),
+              ? `Approve ${formatAmount(amountNumber)} ${vaultData.inputToken.symbol} to ${vaultData.protocol.name}`
+              : `Deposit ${formatAmount(amountNumber)} ${vaultData.inputToken.symbol} to ${vaultDisplay} vault`,
+            displayAmount: formatAmount(amountNumber),
           };
         });
 

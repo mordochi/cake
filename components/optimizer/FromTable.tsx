@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-table';
 import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
-import { Address } from 'viem';
+import { Address, formatUnits, parseUnits } from 'viem';
 import ClickableTooltip from '@/components/ClickableTooltip';
 import Table from '@/components/table';
 import { Reward } from '@/optimizer/types';
@@ -26,7 +26,7 @@ export interface FromData {
   protocolId: string;
   rewards: Reward[];
   token: DebankTokenData;
-  amount: number;
+  amount: bigint;
   apy: number;
   tvl: number;
   debankAsset: DebankAsset;
@@ -202,14 +202,14 @@ export function FromTable({
       header: 'Amount',
       enableSorting: false,
       cell: ({ getValue, row }) => {
-        const value = getValue() as number;
+        const value = getValue() as bigint;
         const token = row.original.debankAsset.asset;
-        const usd = value * token.price;
+        const usd = Number(formatUnits(BigInt(Math.floor(Number(value) * token.price)), token.decimals));
         return (
           <div>
-            <Text fontSize="14px">{value.toFixed(6)}</Text>
+            <Text fontSize="14px">{formatUnits(value, token.decimals)}</Text>
             <Text fontSize="10px" color="gray.300">
-              ~${usd.toFixed(6)}
+              ~${usd.toFixed(2)}
             </Text>
           </div>
         );

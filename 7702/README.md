@@ -55,8 +55,7 @@ $ forge script script/Cake.s.sol:CakeScript \
 --rpc-url http://127.0.0.1:8545 \
 --private-key $PRIVATE_KEY \
 --broadcast  \
--vvvv \
---resume
+-vvvv
 ```
 
 ### Cast

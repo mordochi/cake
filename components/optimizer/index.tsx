@@ -100,7 +100,6 @@ const processDebankData = (
             asset.asset.decimals
           )
         );
-        console.log(`usdValue: `, usdValue);
         fromDataProtocol.push({
           chk: false,
           protocolId: asset.protocol.id,
@@ -122,7 +121,6 @@ const processDebankData = (
             asset.asset.decimals
           )
         );
-        console.log(`else usdValue: `, usdValue);
         fromDataToken.push({
           chk: true,
           protocolId: '',

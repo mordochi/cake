@@ -15,6 +15,7 @@ export default async function RootLayout({
       <head>
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
+        <title>Cake</title>
       </head>
       <body>
         <Providers>

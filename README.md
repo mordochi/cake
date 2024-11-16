@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CAKE
 
-## Getting Started
+### WebSite: https://cake-topaz.vercel.app/
 
-First, run the development server:
+Cake is a DeFi management platform designed to make complex on-chain interactions as easy as eating cake. By utilizing ERC-7702 for account abstraction on EOA wallets, Cake delivers a Web2-like experience for effortless asset management. Users can monitor portfolios via the 1inch API’s wallet tracker, receive personalized yield farming notifications through Push Protocol, and seamlessly optimize DeFi positions across chains and asset types. Cake is focused on simplifying DeFi usability while maximizing users’ asset yields.
+Key features include:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Seamless Asset Transfers: Cross-chain and multi-asset position management to optimize yields with minimal effort.
+- Advanced Portfolio Tracking: Integrated wallet tracking via the 1inch API for instant portfolio insights.
+- Personalized Notifications: Push Protocol notifications tailored to individual DeFi needs, including position updates and high-yield pool alerts.
+  By addressing the usability and efficiency gaps in DeFi, Cake empowers users to unlock the full potential of their assets with minimal friction.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Blockscout**: Verify contracts on Blockscout and direct users to Blockscout explorer.
+- **Push Protocol**: We use Push Protocol to send the best APY yield information to users daily. Users can subscribe Push Protocol from our web app.
+- **NounsDAO**: We’ve brought the design style of Nouns DAO into Cake Stake, combining it with the Cake brand to create a fun and unique identity.
+- **1inch Dev Portal APIs**: Use 1inch api to fetch users' assets to let us to move current positions to another DeFi protocol.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Installation
 
-## Learn More
+To set up CAKE on your local machine, follow these steps:
 
-To learn more about Next.js, take a look at the following resources:
+1. Running your local net!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+       anvil -f https://mainnet.infura.io/v3/${INFURA_KEY} -ardfork prague --fork-block-number 21202319 --chain-id 1 --gas-price 1
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Install the dependencies:
 
-## Deploy on Vercel
+   ```bash
+   yarn add
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Configure environment variables:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   - Set up API keys and other necessary configurations in a `.env` file.
+
+1. Start the application:
+   ```bash
+   yarn dev
+   ```

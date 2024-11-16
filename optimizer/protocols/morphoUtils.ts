@@ -6,7 +6,6 @@ import {
 } from '@/cases/prebuilt-tx/morpho';
 import { StakeChainType } from '@/cases/types';
 import { apiCaller } from '@/utils/apiCaller';
-import { CHAIN_INFO_ID } from '@/utils/generateHttpEndpoint';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import {
   Action,
@@ -75,7 +74,7 @@ export const fetchVaultsByInToken = async (
 ): Promise<Vault[]> => {
   const variables = {
     where: {
-      chainId_in: [CHAIN_INFO_ID[chain.id] ?? chain.id],
+      chainId_in: [chain.id],
       assetAddress_in: inTokenAddress,
       whitelisted: true,
     },
@@ -105,7 +104,7 @@ export const fetchVaultByTokens = async (
 ): Promise<Vault> => {
   const variables = {
     where: {
-      chainId_in: [CHAIN_INFO_ID[chain.id] ?? chain.id],
+      chainId_in: [chain.id],
       assetAddress_in: inTokenAddress,
       address_in: outTokenAddress,
       whitelisted: true,

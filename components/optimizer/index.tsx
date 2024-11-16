@@ -26,7 +26,6 @@ import {
   VaultMetadata,
 } from '@/optimizer/types';
 import { Reward } from '@/optimizer/types';
-import { CHAIN_INFO_ID } from '@/utils/generateHttpEndpoint';
 import NotificationIcon from '@icons/notification.png';
 import { ChainButtonList } from './ChainButtonList';
 import ConfirmModal, {
@@ -62,13 +61,13 @@ const processDebankData = (
 
   Object.entries(debankData).forEach(([chainId, data]) => {
     const usdValue = Number(data.usd_value);
-    const currentChainId = +chainId === 1 ? 31337 : +chainId;
-    if (usdValue > 0 && OptimizerSupportedChains[currentChainId]) {
-      chainUsdValues[currentChainId] = usdValue;
+    // @ts-expect-error skip this error
+    if (usdValue > 0 && OptimizerSupportedChains[chainId]) {
+      chainUsdValues[chainId] = usdValue;
     }
   });
 
-  const currentChainId = CHAIN_INFO_ID[chain.id] ?? +chain.id;
+  const currentChainId = +chain.id;
   const chainData = debankData[currentChainId];
   if (chainData && chainData.assets) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

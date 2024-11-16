@@ -2,7 +2,6 @@
 import { Address, formatUnits } from 'viem';
 import { StakeChainType } from '@/cases/types';
 import { apiCaller } from '@/utils/apiCaller';
-import { CHAIN_INFO_ID } from '@/utils/generateHttpEndpoint';
 import { tryExecuteRequest } from '@/utils/tryExecute';
 import {
   Action,
@@ -45,7 +44,7 @@ export const fetchActiveMarkets = async (
   chain: StakeChainType,
   inputTokenAddress: Address
 ): Promise<Address[]> => {
-  const url = `${PENDLE_API_BASE_URL}/${CHAIN_INFO_ID[chain.id] ?? chain.id}/markets/active`;
+  const url = `${PENDLE_API_BASE_URL}/${chain.id}/markets/active`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -112,7 +111,7 @@ export const fetchMarketInfoByToken = async (
   let offset = 0;
   try {
     while (true) {
-      const url = `${PENDLE_API_BASE_URL}/${CHAIN_INFO_ID[chainId] ?? chainId}/markets?q=${underlyingTokenAddress}&limit=${limit}&skip=${offset}`;
+      const url = `${PENDLE_API_BASE_URL}/${chainId}/markets?q=${underlyingTokenAddress}&limit=${limit}&skip=${offset}`;
       const [res, err] = await tryExecuteRequest(() => apiCaller.get(url));
       if (err) {
         throw new Error(`Failed to fetch market info: ${err.message}`);

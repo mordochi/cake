@@ -16,12 +16,8 @@ import {
 } from 'wagmi/chains';
 import { StakeChainType } from '@/cases/types';
 
-export const CHAIN_INFO_ID: Record<string, number> = {
-  '31337': 1,
-};
-
 export const anvilMainnet = defineChain({
-  id: 31337,
+  id: 1,
   name: 'Ethereum',
   nativeCurrency: {
     name: 'Ether',

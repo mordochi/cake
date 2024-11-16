@@ -1,12 +1,6 @@
 import { Address, encodeFunctionData, getAddress } from 'viem';
 import { StakeChainType } from '@/models/cases/v3/types';
-import {
-  Category,
-  DefiProtocol,
-  Token,
-  TxInfo,
-  VaultMetadata,
-} from '../types';
+import { Category, DefiProtocol, Token, TxInfo, VaultMetadata } from '../types';
 import { arbitrum, mainnet, polygon } from 'viem/chains';
 import { getAPR, YEARN_V3, YearnVault } from './yearnUtils';
 import YearnV3Abi from './abi/YearnV3.json';
@@ -29,7 +23,7 @@ export default class YearnV3 implements DefiProtocol {
       chainIDs: [mainnet, arbitrum, polygon]
         .map((value) => value.id.toString())
         .join(','),
-      limit: '1000',
+      limit: '2500',
     });
     const url = `https://ydaemon.yearn.fi/vaults?` + query;
     const response = await fetch(url, {
@@ -43,7 +37,6 @@ export default class YearnV3 implements DefiProtocol {
       const apr = getAPR(vault);
       return (
         vault.version.split('.')[0] === '3' &&
-        apr > 0.01 &&
         relatedTokens
           .map((value) => value.toLowerCase())
           .includes(vault.token.address.toLowerCase())
@@ -67,7 +60,19 @@ export default class YearnV3 implements DefiProtocol {
     inputTokenAddress: Address,
     outputTokenAddress: Address
   ): Promise<VaultMetadata> => {
-    throw new Error('Method not implemented.');
+    const vaults = await this.getVaults([inputTokenAddress]);
+
+    const vault = vaults.find(
+      (vault) =>
+        vault.chainID === chain.id &&
+        getAddress(vault.address) === getAddress(outputTokenAddress)
+    );
+
+    console.log(vault);
+
+    if (!vault) throw new Error('Vault not found');
+
+    return this.formatVaultMetadata(vault);
   };
 
   // `to` side - deposit

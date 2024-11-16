@@ -8,6 +8,7 @@ import Morpho from './protocols/morpho';
 import Pendle from './protocols/pendle';
 import RocketPool from './protocols/rocketpool';
 import SparkLending from './protocols/sparkLending';
+import YearnV3 from './protocols/yearn';
 import {
   DefiProtocol,
   PositionPair,
@@ -40,6 +41,7 @@ class ProtocolManager {
       new SparkLending(),
       new Ethena(),
       new Etherfi(),
+      new YearnV3(),
     ];
     protocols.forEach((protocol) => {
       this.protocols[protocol.id] = protocol;

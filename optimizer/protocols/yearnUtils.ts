@@ -2,7 +2,7 @@ import { Address } from 'viem'
 import { Category } from '../types'
 
 export const YEARN_V3 = {
-  id: 'yearnv3',
+  id: 'yearn2',
   name: 'Yearn V3',
   siteUrl: 'https://yearn.fi/v3',
   category: Category.YIELD,

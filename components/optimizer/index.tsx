@@ -301,11 +301,6 @@ export default function Optimizer() {
       setIsToDataLoading(true);
 
       try {
-        const testArray = [
-          ...Object.keys(selectedInputTokens || {}),
-          ...Object.values(selectedInputTokens || {}).flatMap(value => value.supplyToken.map(token => token.token_address)),
-        ]
-
         const toDataPromises = [
           ...Object.keys(selectedInputTokens || {}),
           ...Object.values(selectedInputTokens || {}).flatMap(value => value.supplyToken.map(token => token.token_address)),

@@ -31,6 +31,17 @@ export const theme = extendTheme({
   radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%)`,
       },
     },
+    optimizerGradient: {
+      bg: {
+        base: `
+        radial-gradient(circle 530px at 100% 80%, rgba(26, 222, 173, 0.4) 0%, rgba(0, 0, 0, 0) 100%),
+        radial-gradient(circle 882px at 10% 0%, rgba(13, 50, 226, 0.4) 0%, rgba(0, 0, 0, 0) 100%),
+        radial-gradient(circle 340px at 15% 105%, rgba(246, 123, 232, 0.3) 0%, rgba(0, 0, 0, 0) 100%),
+        radial-gradient(circle 280px at 100% 0%, rgba(199, 238, 26, 0.2) 0%, rgba(0, 0, 0, 0) 100%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%)`,
+      },
+      backdropFilter: 'blur(345px)',
+    },
   },
   colors,
   styles: {

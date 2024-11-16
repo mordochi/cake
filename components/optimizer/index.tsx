@@ -8,7 +8,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import {
-  ENV,
   SubscriptionManager,
   WidgetUIProvider,
   darkWidgetTheme,

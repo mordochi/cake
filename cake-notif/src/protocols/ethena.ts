@@ -1,7 +1,7 @@
 import { Address, erc20Abi, formatUnits, getContract } from 'viem';
 import { apiCaller } from '../apiCaller';
 import { tryExecuteRequest } from '../tryExecute';
-import { APYProvider, publicClient, Token } from '../utils';
+import { APYProvider, Token, publicClient } from '../utils';
 
 export default class Ethena implements APYProvider {
   id = 'ethena';

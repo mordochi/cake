@@ -1,19 +1,19 @@
-import { CONSTANTS, PushAPI } from "@pushprotocol/restapi";
-import Aave from "./protocols/aave";
-import Ethena from "./protocols/ethena";
-import EtherFi from "./protocols/etherfi";
-import Lido from "./protocols/lido";
-import RocketPool from "./protocols/rocketpool";
-import SparkLending from "./protocols/sparkLending";
+import { CONSTANTS, PushAPI } from '@pushprotocol/restapi';
+import { Address } from 'viem';
+import Aave from './protocols/aave';
+import Ethena from './protocols/ethena';
+import EtherFi from './protocols/etherfi';
+import Lido from './protocols/lido';
+import RocketPool from './protocols/rocketpool';
+import SparkLending from './protocols/sparkLending';
 import {
   APYProvider,
   NATIVE_TOKEN_ADDRESS,
   Token,
   getTokenInfo,
   walletClient,
-} from "./utils";
-import { Address } from "viem";
-import "dotenv/config";
+} from './utils';
+import 'dotenv/config';
 
 interface APYPair {
   protocol: APYProvider;
@@ -31,7 +31,7 @@ async function main() {
   const pairs: APYPair[] = [
     {
       protocol: aave,
-      tokenAddress: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      tokenAddress: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
     },
     {
       protocol: aave,
@@ -39,7 +39,7 @@ async function main() {
     },
     {
       protocol: ethena,
-      tokenAddress: "0x4c9EDD5852cd905f086C759E8383e09bff1E68B3",
+      tokenAddress: '0x4c9EDD5852cd905f086C759E8383e09bff1E68B3',
     },
     {
       protocol: etherfi,
@@ -55,15 +55,15 @@ async function main() {
     },
   ];
 
-  var maxAPYPair: APYPair | null = null;
-  var maxAPY: number | null = null;
-  var maxTokenInfo: Token | null = null;
+  let maxAPYPair: APYPair | null = null;
+  let maxAPY: number | null = null;
+  let maxTokenInfo: Token | null = null;
 
   for (const pair of pairs) {
     const { protocol, tokenAddress } = pair;
     const tokenInfo = await getTokenInfo(tokenAddress as Address);
     if (!tokenInfo) {
-      throw new Error("Token info not found");
+      throw new Error('Token info not found');
     }
     const apy = await protocol.getAPY(tokenInfo);
     console.log(protocol.name, tokenInfo.symbol, apy);
@@ -76,15 +76,15 @@ async function main() {
   }
 
   console.log(
-    "Max APY",
+    'Max APY',
     maxAPYPair?.protocol.name,
     maxTokenInfo?.symbol,
     maxAPY
   );
   console.log(maxTokenInfo);
 
-  const protocolName = maxAPYPair?.protocol.name ?? "";
-  const symbol = maxTokenInfo?.symbol ?? "";
+  const protocolName = maxAPYPair?.protocol.name ?? '';
+  const symbol = maxTokenInfo?.symbol ?? '';
   const apy = `${((maxAPY ?? 0) * 100).toFixed(2)}%`;
 
   console.log(`${protocolName}: ${symbol} - ${apy}`);
@@ -93,7 +93,7 @@ async function main() {
     env: CONSTANTS.ENV.PROD,
   });
 
-  const res = await userCake.channel.send(["*"], {
+  const res = await userCake.channel.send(['*'], {
     notification: {
       title: `🔥 ${apy} APY now on ${protocolName}`,
       body: `- APY: ${apy}

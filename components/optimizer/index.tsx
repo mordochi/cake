@@ -303,27 +303,27 @@ export default function Optimizer() {
       try {
         const toDataPromises = [
           ...Object.keys(selectedInputTokens || {}),
-          ...Object.values(selectedInputTokens || {}).flatMap(value => value.supplyToken.map(token => token.token_address)),
-        ].map(
-          async (tokenAddress) => {
-            const protocolManager = ProtocolManager.getInstance();
-            const vaultsMetadata = await protocolManager.getVaultsMetadata(
-              chain as StakeChainType,
-              tokenAddress as Address
-            );
-            return vaultsMetadata.map(
-              (metadata): ToData => ({
-                chk: false,
-                rewards: metadata.rewards,
-                apy: metadata.apy,
-                tvl: metadata.tvl,
-                category: metadata.category,
-                vault: metadata,
-                vaultLink: metadata.siteUrl,
-              })
-            );
-          }
-        );
+          ...Object.values(selectedInputTokens || {}).flatMap((value) =>
+            value.supplyToken.map((token) => token.token_address)
+          ),
+        ].map(async (tokenAddress) => {
+          const protocolManager = ProtocolManager.getInstance();
+          const vaultsMetadata = await protocolManager.getVaultsMetadata(
+            chain as StakeChainType,
+            tokenAddress as Address
+          );
+          return vaultsMetadata.map(
+            (metadata): ToData => ({
+              chk: false,
+              rewards: metadata.rewards,
+              apy: metadata.apy,
+              tvl: metadata.tvl,
+              category: metadata.category,
+              vault: metadata,
+              vaultLink: metadata.siteUrl,
+            })
+          );
+        });
 
         const toDataResults = await Promise.all(toDataPromises);
 

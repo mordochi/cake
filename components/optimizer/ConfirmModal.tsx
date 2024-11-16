@@ -20,10 +20,14 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
-import { parseSignature } from 'viem';
-import { useSendTransaction, useSignTypedData } from 'wagmi';
+import { encodeFunctionData, parseSignature } from 'viem';
+import { SignAuthorizationReturnType } from 'viem/experimental';
+import { useAccount } from 'wagmi';
+import { useSignTypedData } from 'wagmi';
 import { waitForTransactionReceipt } from 'wagmi/actions';
 import TableLoadingGIF from '@/public/gitfs/table-loading.gif';
+import _7702walletClient, { _7702Account } from '@/services/7702Client';
+import PublicClient from '@/services/publicClient';
 import { PermitTx, TxInfo } from '../../optimizer/types';
 import { config } from '../../utils/wagmi';
 import {
@@ -33,6 +37,40 @@ import {
   StepType,
   TxStep,
 } from './types';
+
+const BATCH_CALL_CONTRACT = '0xc59E9A8432657dcB5afD6f1682216F2CDDE66954';
+const BATCH_CALL_ABI = [
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: 'bytes',
+            name: 'data',
+            type: 'bytes',
+          },
+          {
+            internalType: 'address',
+            name: 'to',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'value',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'struct BatchCallDelegation.Call[]',
+        name: 'calls',
+        type: 'tuple[]',
+      },
+    ],
+    name: 'execute',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+] as const;
 
 export interface IConfirmModalProps {
   isOpen: boolean;
@@ -100,10 +138,7 @@ export default function ConfirmModal({
   onCompleteTransaction,
   closeOnOverlayClick = true,
 }: IConfirmModalProps) {
-  const { sendTransactionAsync } = useSendTransaction({
-    config,
-  });
-
+  const { chain } = useAccount();
   const { signTypedDataAsync } = useSignTypedData({
     config,
   });
@@ -120,7 +155,10 @@ export default function ConfirmModal({
   });
 
   const handlePermitSignAndTx = useCallback(
-    async (step: PermitSignStep) => {
+    async (
+      step: PermitSignStep,
+      authorization?: SignAuthorizationReturnType
+    ) => {
       try {
         const data = await signTypedDataAsync(
           JSON.parse(step.permitTx.typedData)
@@ -131,12 +169,19 @@ export default function ConfirmModal({
           throw Error(`Permit sign should be followed by permit tx`);
         const { r, s, v, yParity } = parseSignature(data);
         setActiveStep(activeStep + 1);
-        const txHash = await sendTransactionAsync(
-          nextStep.getTx(v ?? BigInt(yParity), r, s)
-        );
-        await waitForTransactionReceipt(config, {
+        const txHash = await _7702walletClient.sendTransaction({
+          ...(authorization ? { authorizationList: [authorization] } : {}),
+          data: encodeFunctionData({
+            abi: BATCH_CALL_ABI,
+            functionName: 'execute',
+            args: [[nextStep.getTx(v ?? BigInt(yParity), r, s)]],
+          }),
+          to: _7702walletClient.account.address,
+        });
+        const transactionReceipt = await waitForTransactionReceipt(config, {
           hash: txHash,
         });
+        console.log('transactionReceipt: ', transactionReceipt);
         setActiveStep(nextStepIndex + 1);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
@@ -162,18 +207,41 @@ export default function ConfirmModal({
         if (steps.length === 0) return;
         if (activeStep === steps.length) return;
         const currentStep = steps[activeStep];
+        if (!chain) return;
+        // @ts-expect-error skip this error
+        const client = PublicClient.get(chain);
+        const code = await client.getCode({
+          address: _7702Account.address,
+        });
+
+        let authorization;
+        if (!code) {
+          authorization = await _7702walletClient.signAuthorization({
+            contractAddress: BATCH_CALL_CONTRACT,
+          });
+        }
+
         switch (currentStep.type) {
           case StepType.PERMIT_SIGN:
-            await handlePermitSignAndTx(currentStep);
+            await handlePermitSignAndTx(currentStep, authorization);
             break;
           case StepType.PERMIT_TX:
             // Do nothing, cause permit tx dependens on permit sign so we handle it right after permit sign
             break;
           case StepType.TX:
-            const txHash = await sendTransactionAsync(currentStep.getTx());
-            await waitForTransactionReceipt(config, {
+            const txHash = await _7702walletClient.sendTransaction({
+              ...(authorization ? { authorizationList: [authorization] } : {}),
+              data: encodeFunctionData({
+                abi: BATCH_CALL_ABI,
+                functionName: 'execute',
+                args: [[currentStep.getTx()]],
+              }),
+              to: _7702walletClient.account.address,
+            });
+            const transactionReceipt = await waitForTransactionReceipt(config, {
               hash: txHash,
             });
+            console.log('transactionReceipt: ', transactionReceipt);
             setActiveStep(activeStep + 1);
             break;
         }

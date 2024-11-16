@@ -5,9 +5,9 @@ import {
   getContract,
   isAddressEqual,
 } from 'viem';
-import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 import { StakeChainType } from '@/cases/types';
 import { aprToApy } from '@/cases/utils';
+import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 import { CHAIN_INFO_ID } from '@/utils/generateHttpEndpoint';
 import PublicClient from '@services/publicClient';
 import { MAX_UINT256, NATIVE_TOKEN_ADDRESS, RAY_DECIMALS } from '../consts';

@@ -73,7 +73,7 @@ export default function Header({}) {
         >
           <Center mr={{ base: '0', sm: '20px' }} gap="16px">
             <Link href="/">
-              <Image src="/logo.png" alt="Cake" h="100%" />
+              <Image src="/logo.png" alt="Cake" h="60px" />
             </Link>
             <Center gap="8px" display={{ base: 'none', md: 'flex' }}></Center>
           </Center>

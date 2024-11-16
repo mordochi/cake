@@ -20,7 +20,9 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
+import { parseSignature } from 'viem';
 import { useSendTransaction, useSignTypedData } from 'wagmi';
+import { waitForTransactionReceipt } from 'wagmi/actions';
 import TableLoadingGIF from '@/public/gitfs/table-loading.gif';
 import { PermitTx, TxInfo } from '../../optimizer/types';
 import { config } from '../../utils/wagmi';
@@ -98,7 +100,7 @@ export default function ConfirmModal({
   onCompleteTransaction,
   closeOnOverlayClick = true,
 }: IConfirmModalProps) {
-  const {} = useSendTransaction({
+  const { sendTransactionAsync } = useSendTransaction({
     config,
   });
 
@@ -117,28 +119,41 @@ export default function ConfirmModal({
     count: steps.length,
   });
 
-  const handlePermitSignAndTx = useCallback(async () => {
-    try {
-      const nextStepIndex = activeStep + 1;
-      const nextStep = steps[nextStepIndex];
-      if (nextStep.type !== StepType.PERMIT_TX)
-        throw Error(`Permit sign should be followed by permit tx`);
-      setActiveStep(activeStep + 1);
-      setActiveStep(nextStepIndex + 1);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      if (error.message.includes('User rejected the request.')) {
-        toast({
-          ...TOAST_CONFIG.USER_CANCEL,
+  const handlePermitSignAndTx = useCallback(
+    async (step: PermitSignStep) => {
+      try {
+        const data = await signTypedDataAsync(
+          JSON.parse(step.permitTx.typedData)
+        );
+        const nextStepIndex = activeStep + 1;
+        const nextStep = steps[nextStepIndex];
+        if (nextStep.type !== StepType.PERMIT_TX)
+          throw Error(`Permit sign should be followed by permit tx`);
+        const { r, s, v, yParity } = parseSignature(data);
+        setActiveStep(activeStep + 1);
+        const txHash = await sendTransactionAsync(
+          nextStep.getTx(v ?? BigInt(yParity), r, s)
+        );
+        await waitForTransactionReceipt(config, {
+          hash: txHash,
         });
-      } else {
-        toast({
-          ...TOAST_CONFIG.ERROR,
-          title: error.message,
-        });
+        setActiveStep(nextStepIndex + 1);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        if (error.message.includes('User rejected the request.')) {
+          toast({
+            ...TOAST_CONFIG.USER_CANCEL,
+          });
+        } else {
+          toast({
+            ...TOAST_CONFIG.ERROR,
+            title: error.message,
+          });
+        }
       }
-    }
-  }, [steps, activeStep, setActiveStep, signTypedDataAsync]);
+    },
+    [steps, activeStep, setActiveStep, signTypedDataAsync]
+  );
 
   useEffect(() => {
     const handleStep = async () => {
@@ -149,12 +164,16 @@ export default function ConfirmModal({
         const currentStep = steps[activeStep];
         switch (currentStep.type) {
           case StepType.PERMIT_SIGN:
-            await handlePermitSignAndTx();
+            await handlePermitSignAndTx(currentStep);
             break;
           case StepType.PERMIT_TX:
             // Do nothing, cause permit tx dependens on permit sign so we handle it right after permit sign
             break;
           case StepType.TX:
+            const txHash = await sendTransactionAsync(currentStep.getTx());
+            await waitForTransactionReceipt(config, {
+              hash: txHash,
+            });
             setActiveStep(activeStep + 1);
             break;
         }

@@ -17,7 +17,7 @@ import { useCallback } from 'react';
 import { useAccountEffect } from 'wagmi';
 import Footer from '@/components/footer';
 import { WalletChip } from '@/components/header/WalletChip';
-import { DesktopDropdown, MobileDropDown, PageInfo } from './Dropdown';
+import { PageInfo } from './Dropdown';
 
 const DESKTOP_HEADER_HEIGHT = '72px';
 export const MOBILE_HEADER_HEIGHT = '52px';

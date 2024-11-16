@@ -405,6 +405,7 @@ export default function Optimizer() {
       const allTxs: (TxInfo | PermitTx)[] = [];
 
       // Handle withdrawals from selected input tokens
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for (const [tokenAddress, fromData] of Object.entries(
         selectedInputTokens
       )) {

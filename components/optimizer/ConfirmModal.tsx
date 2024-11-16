@@ -16,12 +16,10 @@ import {
   StepTitle,
   Stepper,
   UseToastOptions,
-  useSteps,
   useToast,
 } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import { encodeFunctionData, parseSignature } from 'viem';
-import { SignAuthorizationReturnType } from 'viem/experimental';
 import { useAccount } from 'wagmi';
 import { useSignTypedData } from 'wagmi';
 import { waitForTransactionReceipt } from 'wagmi/actions';
@@ -144,109 +142,73 @@ export default function ConfirmModal({
   });
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [sentCompleteEvent, setSentCompleteEvent] = useState(false);
   const toast = useToast();
 
   const steps = generateSteps(txs);
 
-  const { activeStep, setActiveStep } = useSteps({
-    index: 0,
-    count: steps.length,
-  });
-
   const handlePermitSignAndTx = useCallback(
-    async (
-      step: PermitSignStep,
-      authorization?: SignAuthorizationReturnType
-    ) => {
-      try {
-        const data = await signTypedDataAsync(
-          JSON.parse(step.permitTx.typedData)
-        );
-        const nextStepIndex = activeStep + 1;
-        const nextStep = steps[nextStepIndex];
-        if (nextStep.type !== StepType.PERMIT_TX)
-          throw Error(`Permit sign should be followed by permit tx`);
-        const { r, s, v, yParity } = parseSignature(data);
-        setActiveStep(activeStep + 1);
-        const txHash = await _7702walletClient.sendTransaction({
-          ...(authorization ? { authorizationList: [authorization] } : {}),
-          data: encodeFunctionData({
-            abi: BATCH_CALL_ABI,
-            functionName: 'execute',
-            args: [[nextStep.getTx(v ?? BigInt(yParity), r, s)]],
-          }),
-          to: _7702walletClient.account.address,
-        });
-        const transactionReceipt = await waitForTransactionReceipt(config, {
-          hash: txHash,
-        });
-        console.log('transactionReceipt: ', transactionReceipt);
-        setActiveStep(nextStepIndex + 1);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        if (error.message.includes('User rejected the request.')) {
-          toast({
-            ...TOAST_CONFIG.USER_CANCEL,
-          });
-        } else {
-          toast({
-            ...TOAST_CONFIG.ERROR,
-            title: error.message,
-          });
-        }
-      }
+    async (step: PermitSignStep, nextStep: ActionStep) => {
+      const data = await signTypedDataAsync(
+        JSON.parse(step.permitTx.typedData)
+      );
+
+      if (nextStep.type !== StepType.PERMIT_TX)
+        throw Error(`Permit sign should be followed by permit tx`);
+      const { r, s, v, yParity } = parseSignature(data);
+      return nextStep.getTx(v ?? BigInt(yParity), r, s);
     },
-    [steps, activeStep, setActiveStep, signTypedDataAsync]
+    [steps, signTypedDataAsync]
   );
 
   useEffect(() => {
-    const handleStep = async () => {
-      try {
-        if (!isOpen) return;
-        if (steps.length === 0) return;
-        if (activeStep === steps.length) return;
-        const currentStep = steps[activeStep];
+    if (!isOpen) return;
+    if (steps.length === 0) return;
+
+    const handleStep = async (step: ActionStep, nextStep: ActionStep) => {
+      switch (step.type) {
+        case StepType.PERMIT_SIGN:
+          return await handlePermitSignAndTx(step, nextStep);
+        case StepType.PERMIT_TX:
+          return undefined;
+        // Do nothing, cause permit tx dependens on permit sign so we handle it right after permit sign
+        case StepType.TX:
+          return step.getTx();
+      }
+    };
+
+    Promise.all(steps.map((step, index) => handleStep(step, steps[index + 1])))
+      .then(async (txs) => {
         if (!chain) return;
         // @ts-expect-error skip this error
         const client = PublicClient.get(chain);
         const code = await client.getCode({
           address: _7702Account.address,
         });
-
         let authorization;
         if (!code) {
           authorization = await _7702walletClient.signAuthorization({
             contractAddress: BATCH_CALL_CONTRACT,
           });
         }
-
-        switch (currentStep.type) {
-          case StepType.PERMIT_SIGN:
-            await handlePermitSignAndTx(currentStep, authorization);
-            break;
-          case StepType.PERMIT_TX:
-            // Do nothing, cause permit tx dependens on permit sign so we handle it right after permit sign
-            break;
-          case StepType.TX:
-            const txHash = await _7702walletClient.sendTransaction({
-              ...(authorization ? { authorizationList: [authorization] } : {}),
-              data: encodeFunctionData({
-                abi: BATCH_CALL_ABI,
-                functionName: 'execute',
-                args: [[currentStep.getTx()]],
-              }),
-              to: _7702walletClient.account.address,
-            });
-            const transactionReceipt = await waitForTransactionReceipt(config, {
-              hash: txHash,
-            });
-            console.log('transactionReceipt: ', transactionReceipt);
-            setActiveStep(activeStep + 1);
-            break;
-        }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
+        const txHash = await _7702walletClient.sendTransaction({
+          ...(authorization ? { authorizationList: [authorization] } : {}),
+          data: encodeFunctionData({
+            abi: BATCH_CALL_ABI,
+            functionName: 'execute',
+            //@ts-expect-error skip this error
+            args: [txs],
+          }),
+          to: _7702walletClient.account.address,
+        });
+        const transactionReceipt = await waitForTransactionReceipt(config, {
+          hash: txHash,
+        });
+        console.log('transactionReceipt:', transactionReceipt);
+        setIsButtonDisabled(false);
+        onCompleteTransaction(steps.length);
+      })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .catch((error: any) => {
         if (error.message.includes('User rejected the request.')) {
           toast({
             ...TOAST_CONFIG.USER_CANCEL,
@@ -257,25 +219,13 @@ export default function ConfirmModal({
             title: error.message,
           });
         }
-      }
-    };
-    handleStep();
-  }, [activeStep, isOpen]);
-
-  useEffect(() => {
-    setIsButtonDisabled(activeStep !== steps.length);
-    if (steps.length > 0 && activeStep === steps.length && !sentCompleteEvent) {
-      setSentCompleteEvent(true);
-      onCompleteTransaction(steps.length);
-    }
-  }, [activeStep, steps, sentCompleteEvent]);
+      });
+  }, [isOpen]);
 
   const innerOnClose = useCallback(() => {
-    onClose(steps.length > 0 && activeStep === steps.length);
-    setActiveStep(0);
+    onClose(true);
     setIsButtonDisabled(true);
-    setSentCompleteEvent(false);
-  }, [activeStep, steps, onClose]);
+  }, [steps, onClose]);
 
   const handleButtonClick = onButtonClick
     ? () => onButtonClick(innerOnClose)
@@ -324,7 +274,11 @@ export default function ConfirmModal({
               >
                 Confirm Transactions
               </Heading>
-              <Stepper index={activeStep} orientation="vertical" gap="8px">
+              <Stepper
+                index={steps.length - 1}
+                orientation="vertical"
+                gap="8px"
+              >
                 {steps.map((step, index) => (
                   <Step key={index}>
                     <Box
@@ -365,7 +319,7 @@ export default function ConfirmModal({
 
                       <Box w="100%" textAlign="left">
                         <StepTitle>
-                          {index === activeStep
+                          {isButtonDisabled
                             ? step.getDescription() + ' (pending...)'
                             : step.getDescription()}
                         </StepTitle>

@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-table';
 import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
-import { Address, formatUnits, parseUnits } from 'viem';
+import { Address, formatUnits } from 'viem';
 import ClickableTooltip from '@/components/ClickableTooltip';
 import Table from '@/components/table';
 import { Reward } from '@/optimizer/types';
@@ -204,7 +204,12 @@ export function FromTable({
       cell: ({ getValue, row }) => {
         const value = getValue() as bigint;
         const token = row.original.debankAsset.asset;
-        const usd = Number(formatUnits(BigInt(Math.floor(Number(value) * token.price)), token.decimals));
+        const usd = Number(
+          formatUnits(
+            BigInt(Math.floor(Number(value) * token.price)),
+            token.decimals
+          )
+        );
         return (
           <div>
             <Text fontSize="14px">{formatUnits(value, token.decimals)}</Text>

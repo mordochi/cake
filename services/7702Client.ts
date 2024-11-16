@@ -1,11 +1,11 @@
-import { createWalletClient, http } from 'viem';
+import { Address, createWalletClient, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { eip7702Actions } from 'viem/experimental';
 import { anvilMainnet } from '@/utils/generateHttpEndpoint';
 
-// Address: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+// Address: 0x0A6F8e429B1aF453892A9c77ba8ea537913a05e7
 export const _7702Account = privateKeyToAccount(
-  '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'
+  (process.env.NEXT_PUBLIC_7702_PRIVATE as Address) || '0x0'
 );
 
 const walletClient = createWalletClient({
@@ -22,6 +22,6 @@ export default walletClient;
 //  -d '{
 //    "jsonrpc": "2.0",
 //    "method": "eth_getCode",
-//    "params": ["0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", "latest"],
+//    "params": ["0x0A6F8e429B1aF453892A9c77ba8ea537913a05e7", "latest"],
 //    "id": 1
 //  }'

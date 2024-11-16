@@ -12,25 +12,15 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { Fade as Hamburger } from 'hamburger-react';
-import { usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 import { useAccountEffect } from 'wagmi';
 import Footer from '@/components/footer';
 import { WalletChip } from '@/components/header/WalletChip';
-import { PageInfo } from './Dropdown';
 
 const DESKTOP_HEADER_HEIGHT = '72px';
 export const MOBILE_HEADER_HEIGHT = '52px';
 
-const ALPHA_PAGES: PageInfo[] = [
-  {
-    title: 'Usual Money',
-    href: '/alpha/usual-money',
-    eventName: 'alpha_menu_click_usual_money',
-    shouldActivate: true,
-  },
-];
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PageLink = ({
   title,
   href,
@@ -88,7 +78,6 @@ const Tracking = () => {
 
 export default function Header({}) {
   const { isOpen, onToggle } = useDisclosure();
-  const pathname = usePathname();
 
   return (
     <>

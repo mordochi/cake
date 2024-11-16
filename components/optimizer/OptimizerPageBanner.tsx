@@ -14,6 +14,7 @@ const OptimizerPageBanner = () => {
       alignItems="center"
       alignContent="stretch"
       p={{ base: '80px 0 40px 0' }}
+      bg="primary"
     >
       <Center flexDirection="column" textAlign="center" w="100%" h="100%">
         <Flex justifyContent="space-between" alignItems="center" gap="144px">
@@ -25,7 +26,7 @@ const OptimizerPageBanner = () => {
               gap="16px"
             >
               <Box
-                color="white"
+                color="dark"
                 fontSize={{ base: '72px' }}
                 fontWeight={600}
                 lineHeight="72px"
@@ -36,18 +37,18 @@ const OptimizerPageBanner = () => {
               </Box>
               <Box
                 width="560px"
-                color="white"
+                color="dark"
                 fontSize={{ base: '36px' }}
                 fontWeight={700}
                 lineHeight="40px"
-                fontFamily="body"
+                fontFamily="silkscreen"
                 textAlign="left"
               >
                 A Piece of Cake for Sweet DeFi Gains
               </Box>
               <Box
                 width="560px"
-                color="white"
+                color="dark"
                 fontSize={{ base: '24px' }}
                 fontWeight={400}
                 lineHeight="32px"

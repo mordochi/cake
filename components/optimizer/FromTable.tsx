@@ -275,6 +275,8 @@ export function FromTable({
         maxH="440px"
         overflowY="auto"
         onScroll={() => setIsScrolled(true)}
+        color="white"
+        borderRadius="30px"
         sx={{
           '&::-webkit-scrollbar': { display: 'none' },
           scrollbarWidth: 'none',

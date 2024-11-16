@@ -5,7 +5,7 @@ import { dayjs } from '@/utils/dayjs';
 
 const CopyRight = () => {
   return (
-    <Text fontSize="12px" lineHeight="16px" fontWeight={400} color="#FFFFFF">
+    <Text fontSize="12px" lineHeight="16px" fontWeight={400}>
       © {dayjs().year()} Cake
     </Text>
   );

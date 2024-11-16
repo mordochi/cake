@@ -318,6 +318,7 @@ export function ToTable({
         '&::-webkit-scrollbar': { display: 'none' },
         scrollbarWidth: 'none',
       }}
+      color="white"
     >
       <Table table={table} sx={tableSx} />
     </Box>

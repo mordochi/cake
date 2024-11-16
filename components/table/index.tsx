@@ -27,7 +27,7 @@ function GenericTable<TData>({
   ...props
 }: GenericTableProps<TData>) {
   return (
-    <Table {...props}>
+    <Table {...props} overflow="hidden">
       <Thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <Tr key={headerGroup.id}>

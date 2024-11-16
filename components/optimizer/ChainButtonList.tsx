@@ -8,12 +8,14 @@ const ChainButton = ({
   percentage,
   bgColor,
   onSwitchChain,
+  isSelected,
 }: {
   chainId: number;
   chainAsset: number;
   percentage: number;
   bgColor: string;
   onSwitchChain: (chainId: number) => Promise<void>;
+  isSelected: boolean;
 }) => {
   return (
     <Button
@@ -33,14 +35,23 @@ const ChainButton = ({
         <CryptoIcon currency={chainId2name(chainId)} size="32px" mr="8px" />
       </Flex>
       <Flex direction="column">
-        <Text color="gray.300" textAlign="left">
+        <Text
+          color={isSelected ? 'dark' : 'white'}
+          textAlign="left"
+          fontWeight="700"
+          fontFamily="silkscreen"
+        >
           {chainId2name(chainId)}
         </Text>
         <Flex mt={1} gap="8px">
-          <Text fontSize="14px" fontWeight="bold">
+          <Text
+            fontSize="14px"
+            fontWeight="bold"
+            color={isSelected ? 'dark' : 'white'}
+          >
             ${chainAsset.toFixed(2)}
           </Text>
-          <Text fontSize="14px" color="gray.300">
+          <Text fontSize="14px" color="gray.600">
             {percentage.toFixed(0)}%
           </Text>
         </Flex>
@@ -69,7 +80,9 @@ export const ChainButtonList = ({
             ? ((chainUsdValue / totalAssets) * 100).toFixed(0)
             : '0';
           const bgColor =
-            Number(chainId) === selectedChainId ? '#44454a' : '#22242B';
+            Number(chainId) === selectedChainId
+              ? 'rgba(255, 255, 255, 0.5)'
+              : 'rgba(255, 175, 179, 0.7)';
           return (
             <ChainButton
               key={chainId}
@@ -78,6 +91,7 @@ export const ChainButtonList = ({
               percentage={Number(ethereumPercentage)}
               bgColor={bgColor}
               onSwitchChain={onSwitchChain}
+              isSelected={Number(chainId) === selectedChainId}
             />
           );
         })}

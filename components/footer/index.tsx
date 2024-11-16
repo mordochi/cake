@@ -11,8 +11,10 @@ const Footer = ({ inDropdown = false }: { inDropdown?: boolean }) => {
       height={{ base: 'auto', md: '39px' }}
       display={inDropdown ? 'flex' : { base: 'none', md: 'flex' }}
       borderTop="1px solid #111A47"
-      bgColor="#0A0A0A"
+      borderColor="dark"
+      bgColor="primary"
       alignContent="center"
+      color="dark"
     >
       <Box
         padding={{ base: '24px 16px', md: '8px 40px' }}

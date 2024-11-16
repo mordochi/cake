@@ -513,7 +513,7 @@ export default function Optimizer() {
     <>
       <Flex
         flexDirection="column"
-        bg="#1A1B1F"
+        bg="primary"
         w="100%"
         h="100%"
         alignItems="stretch"
@@ -535,7 +535,7 @@ export default function Optimizer() {
               direction={{ base: 'column', md: 'row' }}
               margin="48px"
             >
-              <Flex flex="1" direction="column" width="45%">
+              <Flex flex="1" direction="column" width="45%" color="dark">
                 <Flex justify="space-between" align="center" mb={4}>
                   <Text fontSize="30px" fontWeight="bold">
                     From
@@ -553,7 +553,7 @@ export default function Optimizer() {
                 />
               </Flex>
 
-              <Flex flex="1" direction="column">
+              <Flex flex="1" direction="column" color="dark">
                 <Flex justify="space-between" align="center" mb={4}>
                   <Text fontSize="30px" fontWeight="bold">
                     To
@@ -561,7 +561,7 @@ export default function Optimizer() {
                   <Flex gap={4}>
                     <IconButton
                       aria-label="Notification"
-                      variant="ghost"
+                      // variant="ghost"
                       icon={
                         <Image src={NotificationIcon.src} alt="Notification" />
                       }

@@ -265,7 +265,7 @@ export default function ConfirmModal({
             <Center w="186px" h="136px">
               <Image src={TableLoadingGIF.src} alt="loading" width="96px" />
             </Center>
-            <Box display="flex" flexDirection="column" gap="20px">
+            <Box display="flex" flexDirection="column" gap="20px" color="white">
               <Heading
                 as="h4"
                 fontSize="24px"
@@ -339,6 +339,7 @@ export default function ConfirmModal({
           }}
         >
           <Button
+            bg="dark"
             width="100%"
             p="8px 16px"
             lineHeight="20px"

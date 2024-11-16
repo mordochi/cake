@@ -1,15 +1,32 @@
 import { ToastPosition, extendTheme } from '@chakra-ui/react';
-import * as Fonts from './fonts';
 import colors from './themeHelper/colors';
 import Table from './themeHelper/table';
 import Tag from './themeHelper/tag';
+import { Nunito, Press_Start_2P, Silkscreen, Galindo } from 'next/font/google';
+
+const pressStart2P = Press_Start_2P({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+});
+const silkscreen = Silkscreen({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+});
+const nunito = Nunito({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const theme = extendTheme({
   initialColorMode: 'dark',
   useSystemColorMode: false,
   fonts: {
-    heading: `${Fonts.Satoshi.style.fontFamily}, sans-serif`,
-    body: `${Fonts.Satoshi.style.fontFamily}, sans-serif`,
+    heading: `${pressStart2P.style.fontFamily}, sans-serif`,
+    body: `${nunito.style.fontFamily}, sans-serif`,
+    silkscreen: `${silkscreen.style.fontFamily}, sans-serif`,
   },
   layerStyles: {
     customBanner: {
@@ -47,11 +64,11 @@ export const theme = extendTheme({
   styles: {
     global: {
       html: {
-        bg: '#0A0A0A',
+        bg: 'primary',
       },
       body: {
-        bg: '#0A0A0A',
-        color: 'white',
+        bg: 'primary',
+        color: 'text',
         overflowX: 'hidden',
       },
     },
@@ -131,7 +148,7 @@ export const theme = extendTheme({
       },
       variants: {
         primary: {
-          bg: '#2B50FF',
+          bg: 'dark',
           color: 'white',
           _hover: {
             bg: '#0420A7',
@@ -349,35 +366,6 @@ export const theme = extendTheme({
       gray: {
         default: 'gray.800',
         _dark: 'gray.200',
-      },
-      // @todo: Comment out until confirmed not conflicting with existing styles
-      // primary: {
-      //   default: 'primary.500',
-      //   _dark: 'primary.400',
-      // },
-      background: {
-        default: 'background.500',
-        _dark: 'background.900',
-      },
-      green: {
-        default: 'green.500',
-        _dark: 'green.400',
-      },
-      violet: {
-        default: 'violet.500',
-        _dark: 'violet.400',
-      },
-      lime: {
-        default: 'lime.500',
-        _dark: 'lime.400',
-      },
-      alert: {
-        default: 'alert.500',
-        _dark: 'alert.400',
-      },
-      warning: {
-        default: 'warning.500',
-        _dark: 'warning.400',
       },
     },
   },

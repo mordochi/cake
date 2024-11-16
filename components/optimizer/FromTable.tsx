@@ -31,6 +31,7 @@ export interface FromData {
   tvl: number;
   debankAsset: DebankAsset;
   usdValue: number;
+  supplyToken: DebankTokenData[];
 }
 
 interface FromTableProps {

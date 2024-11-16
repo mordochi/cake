@@ -1,5 +1,5 @@
 import { Address, encodeFunctionData, getAddress } from 'viem';
-import { arbitrum, mainnet, polygon } from 'viem/chains';
+import { mainnet } from 'viem/chains';
 import { StakeChainType } from '@/models/cases/v3/types';
 import TOKEN_IMAGES from '../tokenImages';
 import { Category, DefiProtocol, Token, TxInfo, VaultMetadata } from '../types';
@@ -20,9 +20,7 @@ export default class YearnV3 implements DefiProtocol {
       orderDirection: 'desc',
       strategiesDetails: 'withDetails',
       strategiesCondition: 'inQueue',
-      chainIDs: [mainnet, arbitrum, polygon]
-        .map((value) => value.id.toString())
-        .join(','),
+      chainIDs: [mainnet].map((value) => value.id.toString()).join(','),
       limit: '2500',
     });
     const url = `https://ydaemon.yearn.fi/vaults?` + query;
@@ -34,7 +32,6 @@ export default class YearnV3 implements DefiProtocol {
     const vaults = (await response.json()) as YearnVault[];
 
     const cachedVaults = vaults.filter((vault) => {
-      const apr = getAPR(vault);
       return (
         vault.version.split('.')[0] === '3' &&
         relatedTokens
@@ -64,11 +61,9 @@ export default class YearnV3 implements DefiProtocol {
 
     const vault = vaults.find(
       (vault) =>
-        vault.chainID === chain.id &&
-        getAddress(vault.address) === getAddress(outputTokenAddress)
+        getAddress(vault.address) === getAddress(outputTokenAddress) ||
+        getAddress(vault.staking.address) === getAddress(outputTokenAddress)
     );
-
-    console.log(vault);
 
     if (!vault) throw new Error('Vault not found');
 
@@ -102,7 +97,8 @@ export default class YearnV3 implements DefiProtocol {
     const vault = vaults.find(
       (vault) =>
         vault.chainID === chain.id &&
-        getAddress(vault.address) === getAddress(outputToken.address)
+        (getAddress(vault.address) === getAddress(outputToken.address) ||
+          getAddress(vault.staking.address) === getAddress(outputToken.address))
     );
     if (!vault) throw new Error('Vault not found');
     const maxLoss = 1n;
@@ -161,7 +157,7 @@ export default class YearnV3 implements DefiProtocol {
         logoUrl: undefined,
       },
       tvl: vault.tvl.tvl,
-      apy: getAPR(vault) / 100,
+      apy: getAPR(vault),
       rewards: [],
     };
   }

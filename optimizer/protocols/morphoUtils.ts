@@ -75,7 +75,7 @@ export const fetchVaultsByInToken = async (
 ): Promise<Vault[]> => {
   const variables = {
     where: {
-      chainId_in: [chain.id],
+      chainId_in: [CHAIN_INFO_ID[chain.id] ?? chain.id],
       assetAddress_in: inTokenAddress,
       whitelisted: true,
     },

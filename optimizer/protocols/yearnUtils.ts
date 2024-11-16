@@ -98,16 +98,7 @@ export type YearnVault = {
 };
 
 export const getAPR = (vault: YearnVault) => {
-  let apr = floor(
-    Object.values(vault.apr.extra ?? {}).reduce((acc, value) => {
-      return (acc ?? 0) + (value ?? 0);
-    }, vault.apr.forwardAPR.netAPR),
-    2
-  );
-  if (apr === 0) {
-    apr = vault.apr.netAPR;
-  }
-  return apr;
+  return vault.apr.netAPR;
 };
 
 export const floor = (value: number | null, decimals: number): number => {

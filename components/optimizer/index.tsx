@@ -105,6 +105,7 @@ const processDebankData = (
           tvl: 0,
           debankAsset: asset,
           usdValue,
+          supplyToken: asset.protocol.supply_tokens,
         });
       } else {
         // pure asset
@@ -120,6 +121,7 @@ const processDebankData = (
           tvl: 0,
           debankAsset: asset,
           usdValue,
+          supplyToken: [],
         });
       }
     });
@@ -299,7 +301,15 @@ export default function Optimizer() {
       setIsToDataLoading(true);
 
       try {
-        const toDataPromises = Object.keys(selectedInputTokens || {}).map(
+        const testArray = [
+          ...Object.keys(selectedInputTokens || {}),
+          ...Object.values(selectedInputTokens || {}).flatMap(value => value.supplyToken.map(token => token.token_address)),
+        ]
+
+        const toDataPromises = [
+          ...Object.keys(selectedInputTokens || {}),
+          ...Object.values(selectedInputTokens || {}).flatMap(value => value.supplyToken.map(token => token.token_address)),
+        ].map(
           async (tokenAddress) => {
             const protocolManager = ProtocolManager.getInstance();
             const vaultsMetadata = await protocolManager.getVaultsMetadata(

@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Flex, Grid } from '@chakra-ui/react';
+import { Box, Flex, Grid, Link } from '@chakra-ui/react';
 import CopyRight from './components/CopyRight';
 import SocialMediaButtonGroup from './components/SocialMediaButtonGroup';
 
@@ -36,6 +36,15 @@ const Footer = ({ inDropdown = false }: { inDropdown?: boolean }) => {
 
           <Grid gap="9px" gridAutoFlow="column">
             <SocialMediaButtonGroup />
+          </Grid>
+
+          <Grid gap="9px" gridAutoFlow="column">
+            <Link
+              target="_blank"
+              href="https://eth.blockscout.com/address/0xc59E9A8432657dcB5afD6f1682216F2CDDE66954?tab=contract"
+            >
+              ERC-7702 Smart Contract
+            </Link>
           </Grid>
         </Flex>
       </Box>

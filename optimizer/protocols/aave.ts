@@ -5,7 +5,7 @@ import {
   getContract,
   isAddressEqual,
 } from 'viem';
-import { mainnet } from 'viem/chains';
+import { anvilMainnet as mainnet } from '@/utils/generateHttpEndpoint';
 import { StakeChainType } from '@/cases/types';
 import { aprToApy } from '@/cases/utils';
 import { CHAIN_INFO_ID } from '@/utils/generateHttpEndpoint';
@@ -341,9 +341,7 @@ export default class Aave implements DefiProtocol {
     const client = PublicClient.get(chain);
 
     const dataProvider = getContract({
-      address:
-        this.aaveContractAddrs[CHAIN_INFO_ID[chain.id] ?? chain.id]
-          .ProtocolDataProvider,
+      address: this.aaveContractAddrs[chain.id].ProtocolDataProvider,
       abi: AaveProtocolDataProvider,
       client: client,
     });
@@ -367,9 +365,7 @@ export default class Aave implements DefiProtocol {
     const client = PublicClient.get(chain);
 
     const dataProvider = getContract({
-      address:
-        this.aaveContractAddrs[CHAIN_INFO_ID[chain.id] ?? chain.id]
-          .ProtocolDataProvider,
+      address: this.aaveContractAddrs[chain.id].ProtocolDataProvider,
       abi: AaveProtocolDataProvider,
       client: client,
     });
@@ -386,8 +382,7 @@ export default class Aave implements DefiProtocol {
     const client = PublicClient.get(chain);
 
     const oracle = getContract({
-      address:
-        this.aaveContractAddrs[CHAIN_INFO_ID[chain.id] ?? chain.id].Oracle,
+      address: this.aaveContractAddrs[chain.id].Oracle,
       abi: Oracle,
       client: client,
     });

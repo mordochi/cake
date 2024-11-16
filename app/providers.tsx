@@ -21,10 +21,10 @@ export function Providers({
   caseStatsData: Parameters<typeof CaseStatsProvider>[0]['data'];
 }) {
   useEffect(() => {
-    init(process?.env?.NEXT_PUBLIC_AMPLITUDE_API_KEY || '', {
-      defaultTracking: true,
-      identityStorage: 'localStorage',
-    });
+    // init(process?.env?.NEXT_PUBLIC_AMPLITUDE_API_KEY || '', {
+    //   defaultTracking: true,
+    //   identityStorage: 'localStorage',
+    // });
   }, []);
 
   return (

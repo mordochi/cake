@@ -225,7 +225,7 @@ export default function ConfirmModal({
   const innerOnClose = useCallback(() => {
     onClose(true);
     setIsButtonDisabled(true);
-  }, [steps, onClose]);
+  }, [onClose]);
 
   const handleButtonClick = onButtonClick
     ? () => onButtonClick(innerOnClose)
@@ -239,7 +239,7 @@ export default function ConfirmModal({
       closeOnOverlayClick={closeOnOverlayClick}
     >
       <ModalOverlay />
-      <ModalContent bg="#22242B" borderRadius="24px" p="0" m="16px">
+      <ModalContent borderRadius="24px" p="0" m="16px">
         <ModalCloseButton
           top="16px"
           right="16px"
@@ -254,6 +254,7 @@ export default function ConfirmModal({
 
         <ModalBody
           borderBottom={buttonText ? '1px solid #404040' : undefined}
+          borderColor="dark"
           p={'calc(16px + 24px + 20px) 16px 40px'} // padding top equals to outer padding + button height + inner padding
         >
           <Center
@@ -265,7 +266,7 @@ export default function ConfirmModal({
             <Center w="186px" h="136px">
               <Image src={TableLoadingGIF.src} alt="loading" width="96px" />
             </Center>
-            <Box display="flex" flexDirection="column" gap="20px" color="white">
+            <Box display="flex" flexDirection="column" gap="20px">
               <Heading
                 as="h4"
                 fontSize="24px"

@@ -213,7 +213,7 @@ export function FromTable({
         return (
           <div>
             <Text fontSize="14px">{formatUnits(value, token.decimals)}</Text>
-            <Text fontSize="10px" color="gray.300">
+            <Text fontSize="10px" color="gray.700">
               ~${usd.toFixed(2)}
             </Text>
           </div>
@@ -257,10 +257,9 @@ export function FromTable({
     },
   });
   const tableSx = {
-    border: '1px solid #404040',
     borderRadius: '16px',
     borderCollapse: 'separate',
-    backgroundColor: '#22242B',
+    backgroundColor: 'white',
     tbody: {
       boxShadow: 'unset',
       borderRadius: 'unset',
@@ -275,7 +274,7 @@ export function FromTable({
         maxH="440px"
         overflowY="auto"
         onScroll={() => setIsScrolled(true)}
-        color="white"
+        color="text"
         borderRadius="30px"
         sx={{
           '&::-webkit-scrollbar': { display: 'none' },
@@ -299,7 +298,7 @@ export function FromTable({
             left="0"
             right="0"
             height="440px"
-            background="linear-gradient(180deg, rgba(34, 36, 43, 0) 0%, #22242B 100%)"
+            background="linear-gradient(180deg, rgba(34, 36, 43, 0) 0%, #a3a3a3 100%)"
             pointerEvents="none"
             zIndex={1}
           />

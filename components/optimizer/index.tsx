@@ -566,12 +566,10 @@ export default function Optimizer() {
                       onClick={() => setNotificationModal(true)}
                     />
                     <Button
-                      colorScheme="blue"
                       size="md"
                       borderRadius="full"
                       fontSize="md"
                       fontWeight="bold"
-                      _hover={{ bg: 'blue.400' }}
                       onClick={handleOptimizeModal}
                     >
                       Optimize

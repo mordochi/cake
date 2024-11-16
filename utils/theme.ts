@@ -1,8 +1,8 @@
 import { ToastPosition, extendTheme } from '@chakra-ui/react';
+import { Nunito, Press_Start_2P, Silkscreen } from 'next/font/google';
 import colors from './themeHelper/colors';
 import Table from './themeHelper/table';
 import Tag from './themeHelper/tag';
-import { Nunito, Press_Start_2P, Silkscreen, Galindo } from 'next/font/google';
 
 const pressStart2P = Press_Start_2P({
   weight: '400',
@@ -151,16 +151,15 @@ export const theme = extendTheme({
           bg: 'dark',
           color: 'white',
           _hover: {
-            bg: '#0420A7',
+            bg: 'borderColor',
             _disabled: {
-              color: '#757575',
-              bg: '#333333',
+              color: 'white',
+              bg: 'gray.600',
             },
           },
           _disabled: {
-            opacity: 1,
-            color: '#757575',
-            bg: '#333333',
+            color: 'white',
+            bg: 'gray.600',
           },
         },
         primaryHighlighted: {
@@ -337,15 +336,18 @@ export const theme = extendTheme({
     Checkbox: {
       baseStyle: {
         control: {
-          border: '1px solid',
-          borderColor: '#404040',
           borderRadius: '4px',
           width: '20px',
           height: '20px',
+          _checked: {
+            bg: 'dark',
+            borderColor: 'dark',
+            _hover: {
+              bg: 'dark',
+              borderColor: 'dark',
+            },
+          },
         },
-      },
-      defaultProps: {
-        colorScheme: 'customBlue',
       },
     },
     Tag,

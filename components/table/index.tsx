@@ -50,6 +50,8 @@ function GenericTable<TData>({
                   key={header.id}
                   onClick={header.column.getToggleSortingHandler()}
                   isNumeric={meta?.isNumeric}
+                  bg="white"
+                  color="text"
                   style={{
                     width:
                       // hacks to fix the issue with auto size

@@ -135,15 +135,14 @@ export function ToTable({
                         key={index}
                         pos={index !== 0 ? 'absolute' : 'relative'}
                         left={index !== 0 ? `${index * 16}px` : '0'}
-                        border="1px solid #2A2D3A"
                         borderRadius="50%"
+                        width="24px"
+                        height="24px"
                       >
                         <Image
                           src={reward.logoUrl}
                           alt={reward.desc}
-                          width="24px"
-                          height="24px"
-                          mr="4px"
+                          width="100%"
                         />
                       </Box>
                     );
@@ -293,10 +292,9 @@ export function ToTable({
   });
 
   const tableSx = {
-    border: '1px solid #404040',
     borderRadius: '16px',
     borderCollapse: 'separate',
-    backgroundColor: '#22242B',
+    backgroundColor: 'white',
     tbody: {
       boxShadow: 'unset',
       borderRadius: 'unset',
@@ -318,7 +316,7 @@ export function ToTable({
         '&::-webkit-scrollbar': { display: 'none' },
         scrollbarWidth: 'none',
       }}
-      color="white"
+      color="text"
     >
       <Table table={table} sx={tableSx} />
     </Box>

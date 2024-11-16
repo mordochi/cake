@@ -1,7 +1,8 @@
 const colors = {
   primary: '#FBDADC',
   borderColor: '#ffafb3',
-  dark: '#cd7692',
+  dark: '#ea72b3',
+  darker: '#cd7692',
   text: '#040404',
   customBlue: {
     100: '#2B50FF',

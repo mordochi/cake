@@ -6,11 +6,6 @@ import { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
 import { switchChain } from 'wagmi/actions';
 import { StakeChainType } from '@/cases/types';
-import FeedbackModal, {
-  DEFAULT_FEEDBACK_MODAL_STATE,
-  FeedbackType,
-  IFeedbackModalProps,
-} from '@/components/optimizer/FeedbackModal';
 import useConnector from '@/hooks/useConnector';
 import ProtocolManager from '@/optimizer/protocolManager';
 import {
@@ -125,9 +120,6 @@ export default function Optimizer() {
   const { isConnected } = useConnector();
   const { address, chain, connector } = useAccount();
   const toast = useToast();
-  const [feedbackModal, setFeedbackModal] = useState<IFeedbackModalProps>(
-    DEFAULT_FEEDBACK_MODAL_STATE
-  );
   const [confirmModal, setConfirmModal] = useState<IConfirmModalProps>(
     DEFAULT_CONFIRM_MODAL_STATE
   );
@@ -490,13 +482,6 @@ export default function Optimizer() {
             fetchPositions(address, true);
           }
           setConfirmModal(DEFAULT_CONFIRM_MODAL_STATE);
-          setFeedbackModal({
-            isOpen: true,
-            type: success ? FeedbackType.GOOD : FeedbackType.BAD,
-            onClose: () => {
-              setFeedbackModal(DEFAULT_FEEDBACK_MODAL_STATE);
-            },
-          });
         },
         onCompleteTransaction: (totalSteps: number) => {
           amplitude.track('optimizer_complete_optimize', {
@@ -601,7 +586,6 @@ export default function Optimizer() {
           </>
         )}
       </Flex>
-      <FeedbackModal {...feedbackModal} />
       <ConfirmModal {...confirmModal} />
     </>
   );

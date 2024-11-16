@@ -118,13 +118,6 @@ const processDebankData = (
   return { chainUsdValues, fromDataToken, fromDataProtocol, positionPairs };
 };
 
-// Add new interface for the processed data
-interface ProcessedDebankData {
-  fromDataToken: FromData[];
-  fromDataProtocol: FromData[];
-  positionPairs: PositionPair[];
-}
-
 export default function Optimizer() {
   const { isConnected } = useConnector();
   const { address, chain, connector } = useAccount();
@@ -146,12 +139,8 @@ export default function Optimizer() {
     Record<Address, VaultMetadata>
   >({});
   const [isClient, setIsClient] = useState(false);
-  const [processedDebankData, setProcessedDebankData] =
-    useState<ProcessedDebankData>({
-      fromDataToken: [],
-      fromDataProtocol: [],
-      positionPairs: [],
-    });
+  const [fetchedDebankData, setFetchedDebankData] = useState<DebankPortfolio>();
+  const [isSwitchingChain, setIsSwitchingChain] = useState(false);
   const config = useConfig();
 
   useEffect(() => {
@@ -160,7 +149,6 @@ export default function Optimizer() {
 
   useEffect(() => {
     if (address) {
-      amplitude.setUserId(address);
       if (connector) {
         const identify = new amplitude.Identify();
         identify.setOnce('wallet', connector.id.toLowerCase());
@@ -172,26 +160,12 @@ export default function Optimizer() {
       setToData(undefined);
       setSelectedInputTokens({});
       setSelectedToVault({});
-      setProcessedDebankData({
-        fromDataToken: [],
-        fromDataProtocol: [],
-        positionPairs: [],
-      });
     }
   }, [address, connector]);
 
   const onSwitchChain = async (chainId: number) => {
     try {
-      setChainAssets({});
-      setFromData([]);
-      setToData(undefined);
-      setSelectedInputTokens({});
-      setSelectedToVault({});
-      setProcessedDebankData({
-        fromDataToken: [],
-        fromDataProtocol: [],
-        positionPairs: [],
-      });
+      setIsSwitchingChain(true);
       await switchChain(config, {
         chainId: chainId as (typeof config)['chains'][number]['id'],
       });
@@ -209,7 +183,7 @@ export default function Optimizer() {
 
   const fetchDebankData = async (force: boolean = false, address: Address) => {
     if (!address) throw new Error('Address is required');
-    let url = `https://api-dev.bentobatch.com/v1/shift/address/${address}/summary`;
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/shift/address/${address}/summary`;
     if (force) {
       url += `?force=true`;
     }
@@ -218,25 +192,79 @@ export default function Optimizer() {
     return json as DebankPortfolio;
   };
 
+  useEffect(() => {
+    if (fetchedDebankData) {
+      const {
+        chainUsdValues,
+        fromDataToken,
+        fromDataProtocol,
+        positionPairs,
+        // @ts-expect-error skip this error
+      } = processDebankData(chain, fetchedDebankData);
+
+      setChainAssets(chainUsdValues);
+      const updatedData = {
+        fromDataToken,
+        fromDataProtocol,
+        positionPairs,
+      };
+
+      const fetchPositionMetadata = async () => {
+        const protocolManager = ProtocolManager.getInstance();
+        if (
+          (updatedData.fromDataToken === undefined &&
+            updatedData.fromDataProtocol === undefined) ||
+          !chain?.id
+        )
+          return;
+
+        const postionMetas = await protocolManager.getPositionsMetadata(
+          // @ts-expect-error skip this error
+          chain,
+          updatedData.positionPairs
+        );
+
+        const checkableFromData: FromData[] = [];
+
+        const positionMetasRecord: Record<string, VaultMetadata> = {};
+        postionMetas.forEach((meta) => {
+          positionMetasRecord[meta.protocol.id] = meta;
+        });
+
+        updatedData.fromDataProtocol.forEach((item, index) => {
+          const positionMeta = positionMetasRecord[item.protocolId];
+
+          if (positionMeta) {
+            item.apy = positionMeta.apy;
+            item.tvl = positionMeta.tvl;
+
+            if (positionMeta.protocol.isWithdrawalSupported) {
+              item.chk = true;
+              checkableFromData.push(item);
+              updatedData.fromDataProtocol.splice(index, 1);
+            }
+          }
+        });
+        const fromDataCheckable = [
+          ...updatedData.fromDataToken,
+          ...checkableFromData,
+        ].sort((a, b) => b.usdValue - a.usdValue);
+
+        setFromData([...fromDataCheckable, ...updatedData.fromDataProtocol]);
+      };
+
+      fetchPositionMetadata();
+      setIsSwitchingChain(false);
+    }
+  }, [chain, fetchedDebankData]);
+
   const fetchPositions = useCallback(
     async (address: Address, force: boolean) => {
       if (!chain) throw new Error('Chain is required');
+      if (fetchedDebankData) return;
       try {
         const debankData = await fetchDebankData(force, address);
-        const {
-          chainUsdValues,
-          fromDataToken,
-          fromDataProtocol,
-          positionPairs,
-          // @ts-expect-error skip this error
-        } = processDebankData(chain, debankData);
-
-        setChainAssets(chainUsdValues);
-        setProcessedDebankData({
-          fromDataToken,
-          fromDataProtocol,
-          positionPairs,
-        });
+        setFetchedDebankData(debankData);
       } catch (error) {
         console.error('Error fetching vaults metadata:', error);
         toast({
@@ -248,67 +276,17 @@ export default function Optimizer() {
         });
       }
     },
-    [chain, toast]
+    [chain, fetchedDebankData, toast]
   );
 
   useEffect(() => {
     if (!address) return;
     const chainId = chain?.id;
     if (!chainId) return;
+    if (Object.keys(chainAssets).length) return;
 
     fetchPositions(address, false);
-  }, [chain, address, toast, fetchPositions]);
-
-  useEffect(() => {
-    const fetchPositionMetadata = async () => {
-      const protocolManager = ProtocolManager.getInstance();
-      if (
-        (processedDebankData.fromDataToken === undefined &&
-          processedDebankData.fromDataProtocol === undefined) ||
-        !chain?.id
-      )
-        return;
-
-      const postionMetas = await protocolManager.getPositionsMetadata(
-        // @ts-expect-error skip this error
-        chain,
-        processedDebankData.positionPairs
-      );
-
-      const checkableFromData: FromData[] = [];
-
-      const positionMetasRecord: Record<string, VaultMetadata> = {};
-      postionMetas.forEach((meta) => {
-        positionMetasRecord[meta.protocol.id] = meta;
-      });
-
-      processedDebankData.fromDataProtocol.forEach((item, index) => {
-        const positionMeta = positionMetasRecord[item.protocolId];
-
-        if (positionMeta) {
-          item.apy = positionMeta.apy;
-          item.tvl = positionMeta.tvl;
-
-          if (positionMeta.protocol.isWithdrawalSupported) {
-            item.chk = true;
-            checkableFromData.push(item);
-            processedDebankData.fromDataProtocol.splice(index, 1);
-          }
-        }
-      });
-      const fromDataCheckable = [
-        ...processedDebankData.fromDataToken,
-        ...checkableFromData,
-      ].sort((a, b) => b.usdValue - a.usdValue);
-
-      setFromData([
-        ...fromDataCheckable,
-        ...processedDebankData.fromDataProtocol,
-      ]);
-    };
-
-    fetchPositionMetadata();
-  }, [processedDebankData, chain]);
+  }, [chain, address, fetchPositions, chainAssets]);
 
   useEffect(() => {
     if (chain === undefined || Object.keys(selectedInputTokens).length <= 0) {
@@ -582,6 +560,7 @@ export default function Optimizer() {
                     setSelectedToVault({});
                     setSelectedInputTokens(tokens);
                   }}
+                  isLoading={!fromData || !fromData.length || isSwitchingChain}
                 />
               </Flex>
 

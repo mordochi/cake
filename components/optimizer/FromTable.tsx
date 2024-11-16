@@ -37,12 +37,14 @@ interface FromTableProps {
   data: FromData[];
   selectedInputTokens: Record<Address, FromData>;
   setSelectedInputTokens: (tokens: Record<Address, FromData>) => void;
+  isLoading: boolean;
 }
 
 export function FromTable({
   data,
   selectedInputTokens,
   setSelectedInputTokens,
+  isLoading = false,
 }: FromTableProps) {
   const boxRef = useRef(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -258,7 +260,7 @@ export function FromTable({
       borderRadius: 'unset',
     },
   };
-  return data.length === 0 ? (
+  return isLoading ? (
     <SkeletonTable table={table} sx={tableSx} />
   ) : (
     <Box position="relative">

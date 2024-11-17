@@ -1,6 +1,6 @@
 # CAKE
 
-### WebSite: https://cake-topaz.vercel.app/
+### WebSite: https://cake-ashen.vercel.app/
 
 Cake is a DeFi management platform designed to make complex on-chain interactions as easy as eating cake. By utilizing ERC-7702 for account abstraction on EOA wallets, Cake delivers a Web2-like experience for effortless asset management. Users can monitor portfolios via the 1inch API’s wallet tracker, receive personalized yield farming notifications through Push Protocol, and seamlessly optimize DeFi positions across chains and asset types. Cake is focused on simplifying DeFi usability while maximizing users’ asset yields.
 Key features include:

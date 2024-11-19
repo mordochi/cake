@@ -298,7 +298,7 @@ export function FromTable({
             left="0"
             right="0"
             height="440px"
-            background="linear-gradient(180deg, rgba(34, 36, 43, 0) 0%, #a3a3a3 100%)"
+            background="linear-gradient(180deg, rgba(34, 36, 43, 0) 0%, #ffafb3 100%)"
             pointerEvents="none"
             zIndex={1}
           />
